@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency Fund — Ledger</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F3EEE0;
+  --paper-deep:#ECE5D2;
+  --rule:#D9CFB0;
+  --margin:#C0504D;
+  --ink:#1E2A3A;
+  --ink-soft:#5B6472;
+  --ink-faint:#8B8470;
+  --stamp-red:#A23B2E;
+  --stamp-amber:#A87617;
+  --green:#3F6B4A;
+  --card-shadow: 0 1px 0 rgba(30,42,58,0.06), 0 6px 16px rgba(30,42,58,0.06);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 33px,
+    var(--rule) 34px
+  );
+  color:var(--ink);
+  font-family:'IBM Plex Sans', sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+.sheet{
+  max-width:980px;
+  margin:0 auto;
+  padding:28px 28px 80px 64px;
+  position:relative;
+}
+.sheet::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0; left:40px;
+  width:1px;
+  background:var(--margin);
+  opacity:0.55;
+}
+
+.auth-bar{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--ink-soft);
+}
+.auth-bar .you{ color:var(--green); font-weight:600; }
+
+header.masthead{
+  padding-bottom:18px;
+  margin-bottom:22px;
+  border-bottom:2px solid var(--ink);
+}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--ink-faint);
+  margin:0 0 6px 0;
+}
+h1.title{
+  font-family:'Special Elite', monospace;
+  font-size:32px;
+  font-weight:400;
+  letter-spacing:0.5px;
+  margin:0 0 6px 0;
+  color:var(--ink);
+}
+.tagline{
+  font-size:14px;
+  color:var(--ink-soft);
+  margin:0;
+  font-style:italic;
+}
+
+nav.tabs{
+  display:flex;
+  gap:4px;
+  margin:20px 0 24px 0;
+  flex-wrap:wrap;
+}
+.tab-btn{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12.5px;
+  letter-spacing:0.5px;
+  background:var(--paper-deep);
+  border:1px solid var(--rule);
+  border-bottom:none;
+  color:var(--ink-soft);
+  padding:9px 16px 8px 16px;
+  cursor:pointer;
+  border-radius:5px 5px 0 0;
+  position:relative;
+  top:1px;
+}
+.tab-btn:hover{ color:var(--ink); }
+.tab-btn.active{
+  background:var(--paper);
+  color:var(--ink);
+  font-weight:600;
+  border-bottom:1px solid var(--paper);
+  box-shadow: 0 -2px 0 var(--margin) inset;
+}
+.tab-btn:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+
+.panel{ display:none; }
+.panel.active{ display:block; animation: fadein .18s ease; }
+@keyframes fadein{ from{opacity:0; transform:translateY(2px);} to{opacity:1; transform:none;} }
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+  gap:1px;
+  background:var(--ink);
+  border:1px solid var(--ink);
+  margin-bottom:28px;
+  border-radius:6px;
+  overflow:hidden;
+}
+.stat{ background:var(--paper); padding:14px 16px; }
+.stat .label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px; letter-spacing:1.2px; text-transform:uppercase;
+  color:var(--ink-faint); margin-bottom:6px;
+}
+.stat .value{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:21px; font-weight:600; color:var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.stat .value.green{ color:var(--green); }
+.stat .value.amber{ color:var(--stamp-amber); }
+.stat .value.red{ color:var(--stamp-red); }
+
+.card{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  box-shadow:var(--card-shadow);
+  padding:20px;
+  margin-bottom:22px;
+}
+.card h2{
+  font-family:'Special Elite', monospace;
+  font-weight:400; font-size:17px; margin:0 0 14px 0;
+  display:flex; align-items:center; gap:10px;
+}
+.card h2 .count{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint); font-weight:400; }
+
+table{ width:100%; border-collapse:collapse; }
+th{
+  text-align:left; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+  letter-spacing:0.8px; text-transform:uppercase; color:var(--ink-faint);
+  padding:0 10px 8px 10px; border-bottom:1px solid var(--ink); font-weight:500;
+}
+td{ padding:11px 10px; border-bottom:1px solid var(--rule); font-size:13.5px; vertical-align:top; }
+tr:last-child td{ border-bottom:none; }
+td.num{ font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; }
+td.notes{ color:var(--ink-soft); font-size:12.5px; max-width:220px; }
+.round-tag{
+  font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-soft);
+  background:var(--paper-deep); padding:2px 7px; border-radius:3px; white-space:nowrap;
+}
+
+.stamp{
+  display:inline-block; padding:2px 9px; border:2px solid currentColor; border-radius:4px;
+  font-family:'Special Elite', monospace; font-size:10.5px; letter-spacing:1.3px;
+  text-transform:uppercase; transform:rotate(-5deg); opacity:0.88; mix-blend-mode:multiply;
+  background:none;
+}
+.stamp.paid{ color:var(--stamp-red); }
+.stamp.pending{ color:var(--stamp-amber); border-style:dashed; transform:rotate(-3deg); }
+button.stamp{ cursor:pointer; }
+button.stamp:hover{ opacity:1; }
+
+.form-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:12px; margin-bottom:14px; }
+label{
+  display:block; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:1px;
+  text-transform:uppercase; color:var(--ink-faint); margin-bottom:5px;
+}
+input, select, textarea{
+  width:100%; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; padding:8px 10px;
+  border:1px solid var(--rule); border-radius:5px; background:#fff; color:var(--ink);
+}
+input:focus, select:focus, textarea:focus{ outline:2px solid var(--ink); outline-offset:1px; border-color:var(--ink); }
+textarea{ resize:vertical; min-height:38px; font-family:'IBM Plex Sans', sans-serif; }
+
+button.primary{
+  font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.6px;
+  background:var(--ink); color:var(--paper); border:none; padding:10px 18px;
+  border-radius:5px; cursor:pointer; text-transform:uppercase;
+}
+button.primary:hover{ background:#0f1822; }
+button.primary:disabled{ opacity:0.5; cursor:not-allowed; }
+button.ghost{
+  font-family:'IBM Plex Mono', monospace; font-size:11.5px; background:none;
+  border:1px solid var(--rule); color:var(--ink-soft); padding:7px 12px; border-radius:5px; cursor:pointer;
+}
+button.ghost:hover{ border-color:var(--ink); color:var(--ink); }
+button.danger-text{
+  font-family:'IBM Plex Mono', monospace; font-size:11px; background:none; border:none;
+  color:var(--ink-faint); cursor:pointer; text-decoration:underline; padding:0;
+}
+button.danger-text:hover{ color:var(--stamp-red); }
+button:focus-visible, .stamp:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+
+.row-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+.member-pool-bar{ display:flex; align-items:center; gap:10px; margin-top:8px; }
+.member-pool-track{ flex:1; height:6px; background:var(--rule); border-radius:3px; overflow:hidden; }
+.member-pool-fill{ height:100%; background:var(--green); }
+
+.empty-state{ text-align:center; padding:30px 10px; color:var(--ink-faint); font-size:13px; font-family:'IBM Plex Mono', monospace; }
+
+.note-banner{
+  font-size:12px; color:var(--ink-soft); background:var(--paper-deep);
+  border:1px dashed var(--rule); border-radius:6px; padding:10px 14px; margin-bottom:20px; line-height:1.5;
+}
+.note-banner b{ color:var(--ink); }
+.error-text{ color:var(--stamp-red); font-size:12.5px; margin-top:8px; }
+
+.save-pill{
+  position:fixed; bottom:18px; right:18px; font-family:'IBM Plex Mono', monospace; font-size:11px;
+  background:var(--ink); color:var(--paper); padding:8px 14px; border-radius:20px;
+  opacity:0; transition:opacity .25s ease; pointer-events:none; z-index:50;
+}
+.save-pill.show{ opacity:0.92; }
+
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(30,42,58,0.45);
+  display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+}
+.modal-overlay.show{ display:flex; }
+.modal{
+  background:var(--paper); border-radius:10px; padding:24px; max-width:380px; width:100%;
+  box-shadow:0 20px 50px rgba(0,0,0,0.3); border:1px solid var(--rule);
+}
+.modal h3{ font-family:'Special Elite', monospace; font-weight:400; margin:0 0 14px 0; font-size:16px; }
+.modal p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
+.modal .row-actions{ margin-top:18px; justify-content:flex-end; }
+
+@media (max-width:640px){
+  .sheet{ padding:20px 16px 70px 36px; }
+  .sheet::before{ left:18px; }
+  table thead{ display:none; }
+  table, tbody, tr, td{ display:block; width:100%; }
+  tr{ border-bottom:1px solid var(--rule); padding:10px 0; }
+  td{ border:none; padding:3px 0; display:flex; justify-content:space-between; gap:10px; }
+  td::before{ content:attr(data-label); font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; color:var(--ink-faint); flex-shrink:0; }
+  td.notes{ display:block; }
+  td.notes::before{ display:block; margin-bottom:3px; }
+}
+
+.loading-msg{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); padding:20px 0; }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="auth-bar">
+    <span id="authStatus">Checking sign-in…</span>
+    <button class="ghost" id="authBtn">Admin sign in</button>
+  </div>
+
+  <header class="masthead">
+    <p class="eyebrow" id="todayDate">—</p>
+    <h1 class="title">Emergency Fund — Ledger</h1>
+    <p class="tagline">What we put in, what gets borrowed, what comes back with interest.</p>
+  </header>
+
+  <div class="note-banner" id="noteBanner">
+    Anyone with this link can view the ledger. Only the signed-in admin can add, edit, or remove entries.
+  </div>
+
+  <nav class="tabs" role="tablist" id="tabNav"></nav>
+
+  <div id="appRoot">
+    <p class="loading-msg">Opening the ledger…</p>
+  </div>
+</div>
+
+<div class="save-pill" id="savePill">Saved to ledger</div>
+
+<!-- confirm modal -->
+<div class="modal-overlay" id="confirmOverlay">
+  <div class="modal">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmBody"></p>
+    <div class="row-actions">
+      <button class="ghost" id="confirmCancel">Cancel</button>
+      <button class="primary" id="confirmOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- login modal -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal">
+    <h3>Admin sign in</h3>
+    <form id="loginForm">
+      <div style="margin-bottom:10px;">
+        <label>Email</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <p class="error-text" id="loginError" style="display:none;"></p>
+      <div class="row-actions">
+        <button type="button" class="ghost" id="loginCancel">Cancel</button>
+        <button type="submit" class="primary" id="loginSubmit">Sign in</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================================================================
+     FIREBASE SETUP — paste your project's config below, then delete
+     this comment block. See the setup walkthrough for where to get it
+     (Firebase Console > Project settings > General > Your apps).
+=================================================================== -->
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<script>
+// =====================================================================
+// 1) PASTE YOUR FIREBASE CONFIG HERE (from Firebase Console)
+// =====================================================================
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA5KLVGuACssk4a7HEBMh0tgisqyfmST7c",
+  authDomain: "emergency-fund-ledger.firebaseapp.com",
+  projectId: "emergency-fund-ledger",
+  storageBucket: "emergency-fund-ledger.firebasestorage.app",
+  messagingSenderId: "1098106980667",
+  appId: "1:1098106980667:web:0c1cf0ca9764da6e940f1e",
+  measurementId: "G-6WWGSZ4TWK"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// ---------------------------------------------------------------------
+// Data model
+// ---------------------------------------------------------------------
+const DEFAULT_DATA = {
+  members: [
+    { id:'m1', name:'John',    contribution:2000 },
+    { id:'m2', name:'Daniel',  contribution:2000 },
+    { id:'m3', name:'Brian',   contribution:1000 },
+    { id:'m4', name:'Grace',   contribution:2000 },
+    { id:'m5', name:'Chiroli', contribution:2000 },
+  ],
+  settings: {
+    defaultInterestRate: 10,
+    transactionCostAdjustment: 295
+  },
+  loans: [
+    { id:'l1',  round:'1st Borrowing', borrower:'Daniel',  principal:2000, interestAmount:200, status:'paid',    notes:'' },
+    { id:'l2',  round:'1st Borrowing', borrower:'Grace',   principal:2000, interestAmount:200, status:'paid',    notes:'' },
+    { id:'l3',  round:'1st Borrowing', borrower:'Brian',   principal:1000, interestAmount:100, status:'paid',    notes:'' },
+    { id:'l4',  round:'1st Borrowing', borrower:'John',    principal:600,  interestAmount:60,  status:'paid',    notes:'' },
+    { id:'l5',  round:'1st Borrowing', borrower:'Chiroli', principal:2000, interestAmount:200, status:'pending', notes:'Payment still in progress' },
+    { id:'l6',  round:'2nd Borrowing', borrower:'Daniel',  principal:2000, interestAmount:200, status:'paid',    notes:'' },
+    { id:'l7',  round:'2nd Borrowing', borrower:'Brian',   principal:500,  interestAmount:50,  status:'paid',    notes:'' },
+    { id:'l8',  round:'2nd Borrowing', borrower:'Grace',   principal:500,  interestAmount:50,  status:'paid',    notes:'' },
+    { id:'l9',  round:'2nd Borrowing', borrower:'John',    principal:1000, interestAmount:100, status:'paid',    notes:'' },
+    { id:'l10', round:'3rd Borrowing', borrower:'Daniel',  principal:4500, interestAmount:450, status:'paid',    notes:'Borrowed on behalf of the group; interest shared back — Grace 200, John 150, Brian 100. Principal returned to the account.' },
+    { id:'l11', round:'3rd Borrowing', borrower:'Daniel',  principal:1000, interestAmount:100, status:'paid',    notes:"Borrowed from John's contribution; interest credited to John." },
+    { id:'l12', round:'Interest Payment', borrower:'Daniel', principal:0,  interestAmount:200, status:'paid',    notes:'Interest paid this month on previous borrowing.' },
+    { id:'l13', round:'4th Borrowing', borrower:'John',    principal:2000, interestAmount:200, status:'pending', notes:'Not yet paid' },
+    { id:'l14', round:'4th Borrowing', borrower:'Grace',   principal:2000, interestAmount:200, status:'pending', notes:'Not yet paid' },
+    { id:'l15', round:'4th Borrowing', borrower:'Daniel',  principal:1500, interestAmount:150, status:'pending', notes:'Not yet paid' },
+  ]
+};
+
+let DATA = null;          // null = not loaded / not yet initialized in Firestore
+let isAdmin = false;
+let currentTab = 'dashboard';
+
+// ---------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------
+auth.onAuthStateChanged(user=>{
+  isAdmin = !!user;
+  const statusEl = document.getElementById('authStatus');
+  const btn = document.getElementById('authBtn');
+  if (isAdmin){
+    statusEl.innerHTML = 'Signed in as <span class="you">' + escapeHtml(user.email) + '</span>';
+    btn.textContent = 'Sign out';
+  } else {
+    statusEl.textContent = 'Viewing — read only';
+    btn.textContent = 'Admin sign in';
+    if (currentTab === 'add' || currentTab === 'settings') currentTab = 'dashboard';
+  }
+  renderNav();
+  render();
+});
+
+document.getElementById('authBtn').addEventListener('click', ()=>{
+  if (isAdmin){ auth.signOut(); }
+  else { openLoginModal(); }
+});
+
+function openLoginModal(){
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginForm').reset();
+  document.getElementById('loginOverlay').classList.add('show');
+  document.getElementById('loginEmail').focus();
+}
+function closeLoginModal(){
+  document.getElementById('loginOverlay').classList.remove('show');
+}
+document.getElementById('loginCancel').addEventListener('click', closeLoginModal);
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const submitBtn = document.getElementById('loginSubmit');
+  errEl.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Signing in…';
+  try{
+    await auth.signInWithEmailAndPassword(email, password);
+    closeLoginModal();
+  }catch(err){
+    errEl.textContent = humanAuthError(err);
+    errEl.style.display = 'block';
+  }finally{
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Sign in';
+  }
+});
+function humanAuthError(err){
+  const code = err && err.code;
+  if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') return 'Email or password not recognized.';
+  if (code === 'auth/too-many-requests') return 'Too many attempts — wait a moment and try again.';
+  if (code === 'auth/invalid-email') return 'That email address looks invalid.';
+  return 'Could not sign in (' + (code || 'unknown error') + ').';
+}
+
+// ---------------------------------------------------------------------
+// Firestore live data
+// ---------------------------------------------------------------------
+docRef.onSnapshot(
+  (doc)=>{
+    DATA = doc.exists ? doc.data() : null;
+    render();
+  },
+  (err)=>{
+    console.error('Firestore read error', err);
+    DATA = undefined; // signals a connection/config error
+    render();
+  }
+);
+
+let saveTimer = null;
+async function persist(){
+  try{
+    await docRef.set(DATA);
+    flashSaved();
+  }catch(e){
+    console.error('Save failed', e);
+    flashSaved(true);
+  }
+}
+function flashSaved(failed){
+  const pill = document.getElementById('savePill');
+  pill.textContent = failed ? 'Could not save — check your connection' : 'Saved to ledger';
+  pill.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>pill.classList.remove('show'), 1600);
+}
+async function seedLedger(useDefaults){
+  const initial = useDefaults
+    ? JSON.parse(JSON.stringify(DEFAULT_DATA))
+    : { members:[], loans:[], settings:{ defaultInterestRate:10, transactionCostAdjustment:0 } };
+  try{
+    await docRef.set(initial);
+  }catch(e){
+    console.error('Seed failed', e);
+    alert('Could not set up the ledger: ' + e.message);
+  }
+}
+
+function uid(prefix){ return prefix + '_' + Math.random().toString(36).slice(2,9); }
+
+// ---------------------------------------------------------------------
+// Computations
+// ---------------------------------------------------------------------
+function computeStats(){
+  const pool = DATA.members.reduce((s,m)=>s+Number(m.contribution||0),0);
+  const outstandingPrincipal = DATA.loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.principal||0),0);
+  const interestPaid = DATA.loans.filter(l=>l.status==='paid').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const interestPending = DATA.loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const txnCost = Number(DATA.settings.transactionCostAdjustment||0);
+  const netGenerated = interestPaid - txnCost;
+  return { pool, outstandingPrincipal, interestPaid, interestPending, txnCost, netGenerated };
+}
+function memberStats(name){
+  const loans = DATA.loans.filter(l=>l.borrower===name);
+  const totalBorrowed = loans.reduce((s,l)=>s+Number(l.principal||0),0);
+  const interestPaid = loans.filter(l=>l.status==='paid').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const outstanding = loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.principal||0),0);
+  return { totalBorrowed, interestPaid, outstanding, loanCount: loans.length };
+}
+function fmt(n){ n = Number(n||0); return n.toLocaleString('en-KE', { maximumFractionDigits:0 }); }
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str == null ? '' : String(str); return d.innerHTML; }
+function stampRotation(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))%360; return (h%9)-4; }
+
+// ---------------------------------------------------------------------
+// Nav
+// ---------------------------------------------------------------------
+function renderNav(){
+  const tabs = [
+    { id:'dashboard', label:'Dashboard' },
+    { id:'loans', label:'Loans' },
+    { id:'members', label:'Members' },
+  ];
+  if (isAdmin){
+    tabs.push({ id:'add', label:'+ New Entry' });
+    tabs.push({ id:'settings', label:'Settings' });
+  }
+  const nav = document.getElementById('tabNav');
+  nav.innerHTML = tabs.map(t=>
+    `<button class="tab-btn ${currentTab===t.id?'active':''}" data-tab="${t.id}">${t.label}</button>`
+  ).join('');
+  nav.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ currentTab = btn.getAttribute('data-tab'); renderNav(); render(); });
+  });
+}
+
+// ---------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------
+function render(){
+  const root = document.getElementById('appRoot');
+
+  if (DATA === undefined){
+    root.innerHTML = `<div class="card"><h2>Can't reach the ledger</h2>
+      <p style="font-size:13px;color:var(--ink-soft);">Double-check the Firebase config at the top of the script, your internet connection, and that Firestore is enabled in your Firebase project.</p></div>`;
+    return;
+  }
+
+  if (DATA === null){
+    root.innerHTML = isAdmin
+      ? `<div class="card"><h2>Set up the ledger</h2>
+          <p style="font-size:13px;color:var(--ink-soft);">No data yet in Firestore. Start with the historical records from the paper notebook, or start blank.</p>
+          <div class="row-actions">
+            <button class="primary" id="seedDefaultBtn">Load historical data</button>
+            <button class="ghost" id="seedEmptyBtn">Start empty</button>
+          </div>
+        </div>`
+      : `<div class="empty-state">The ledger hasn't been set up yet. Ask the admin to sign in.</div>`;
+    if (isAdmin){
+      const d = document.getElementById('seedDefaultBtn');
+      const e = document.getElementById('seedEmptyBtn');
+      if (d) d.addEventListener('click', ()=>seedLedger(true));
+      if (e) e.addEventListener('click', ()=>seedLedger(false));
+    }
+    return;
+  }
+
+  if (currentTab === 'dashboard') root.innerHTML = renderDashboard();
+  else if (currentTab === 'loans') root.innerHTML = renderLoans();
+  else if (currentTab === 'members') root.innerHTML = renderMembers();
+  else if (currentTab === 'add' && isAdmin) root.innerHTML = renderAddEntry();
+  else if (currentTab === 'settings' && isAdmin) root.innerHTML = renderSettings();
+  else { currentTab = 'dashboard'; root.innerHTML = renderDashboard(); }
+
+  bindPanelEvents();
+}
+
+function renderDashboard(){
+  const s = computeStats();
+  const recent = [...DATA.loans].slice(-6).reverse();
+  const memberRows = DATA.members.map(m=>{
+    const ms = memberStats(m.name);
+    return `<tr>
+      <td data-label="Member">${escapeHtml(m.name)}</td>
+      <td data-label="Borrowed" class="num">KES ${fmt(ms.totalBorrowed)}</td>
+      <td data-label="Interest paid" class="num">KES ${fmt(ms.interestPaid)}</td>
+      <td data-label="Outstanding" class="num">${ms.outstanding ? 'KES '+fmt(ms.outstanding) : '—'}</td>
+    </tr>`;
+  }).join('');
+  const recentRows = recent.map(l=>{
+    const rot = stampRotation(l.id);
+    return `<tr>
+      <td data-label="Round"><span class="round-tag">${escapeHtml(l.round)}</span></td>
+      <td data-label="Borrower">${escapeHtml(l.borrower)}</td>
+      <td data-label="Principal" class="num">${l.principal ? 'KES '+fmt(l.principal) : '—'}</td>
+      <td data-label="Interest" class="num">KES ${fmt(l.interestAmount)}</td>
+      <td data-label="Status"><span class="stamp ${l.status}" style="transform:rotate(${rot}deg)">${l.status}</span></td>
+    </tr>`;
+  }).join('');
+  return `<div class="panel active">
+    <div class="stat-grid">
+      <div class="stat"><div class="label">Pool (contributions)</div><div class="value">KES ${fmt(s.pool)}</div></div>
+      <div class="stat"><div class="label">Outstanding principal</div><div class="value amber">KES ${fmt(s.outstandingPrincipal)}</div></div>
+      <div class="stat"><div class="label">Interest collected</div><div class="value green">KES ${fmt(s.interestPaid)}</div></div>
+      <div class="stat"><div class="label">Transaction costs</div><div class="value red">KES ${fmt(s.txnCost)}</div></div>
+      <div class="stat"><div class="label">Net generated</div><div class="value green">KES ${fmt(s.netGenerated)}</div></div>
+      <div class="stat"><div class="label">Interest pending</div><div class="value amber">KES ${fmt(s.interestPending)}</div></div>
+    </div>
+    <div class="card"><h2>By member <span class="count">${DATA.members.length}</span></h2>
+      <table><thead><tr><th>Member</th><th>Borrowed</th><th>Interest paid</th><th>Outstanding</th></tr></thead>
+      <tbody>${memberRows || '<tr><td colspan="4"><div class="empty-state">No members yet</div></td></tr>'}</tbody></table>
+    </div>
+    <div class="card"><h2>Recent entries <span class="count">last ${recent.length}</span></h2>
+      <table><thead><tr><th>Round</th><th>Borrower</th><th>Principal</th><th>Interest</th><th>Status</th></tr></thead>
+      <tbody>${recentRows || '<tr><td colspan="5"><div class="empty-state">No entries yet</div></td></tr>'}</tbody></table>
+    </div>
+  </div>`;
+}
+
+function renderLoans(){
+  const grouped = {};
+  DATA.loans.forEach(l=>{ if(!grouped[l.round]) grouped[l.round]=[]; grouped[l.round].push(l); });
+  const sections = Object.keys(grouped).map(round=>{
+    const rows = grouped[round].map(l=>{
+      const rot = stampRotation(l.id);
+      const statusEl = isAdmin
+        ? `<button class="stamp ${l.status} toggle-status" data-id="${l.id}" style="transform:rotate(${rot}deg)" title="Click to toggle paid/pending">${l.status}</button>`
+        : `<span class="stamp ${l.status}" style="transform:rotate(${rot}deg)">${l.status}</span>`;
+      const removeBtn = isAdmin ? `<button class="danger-text delete-loan" data-id="${l.id}">remove</button>` : '';
+      return `<tr data-id="${l.id}">
+        <td data-label="Borrower">${escapeHtml(l.borrower)}</td>
+        <td data-label="Principal" class="num">${l.principal ? 'KES '+fmt(l.principal) : '—'}</td>
+        <td data-label="Interest" class="num">KES ${fmt(l.interestAmount)}</td>
+        <td data-label="Status">${statusEl}</td>
+        <td data-label="Notes" class="notes">${escapeHtml(l.notes) || '—'}</td>
+        <td data-label="">${removeBtn}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="card"><h2>${escapeHtml(round)} <span class="count">${grouped[round].length} ${grouped[round].length===1?'entry':'entries'}</span></h2>
+      <table><thead><tr><th>Borrower</th><th>Principal</th><th>Interest</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`;
+  }).join('');
+  return `<div class="panel active">${sections || '<div class="empty-state">No loans recorded yet.</div>'}</div>`;
+}
+
+function renderMembers(){
+  const s = computeStats();
+  const rows = DATA.members.map(m=>{
+    const ms = memberStats(m.name);
+    const pct = s.pool ? Math.round((m.contribution/s.pool)*100) : 0;
+    const removeBtn = isAdmin ? `<div class="row-actions" style="margin-top:14px;"><button class="danger-text remove-member" data-id="${m.id}">remove member</button></div>` : '';
+    return `<div class="card" data-id="${m.id}">
+      <h2>${escapeHtml(m.name)} <span class="count">joined the pool with KES ${fmt(m.contribution)}</span></h2>
+      <div class="stat-grid" style="margin-bottom:10px;">
+        <div class="stat"><div class="label">Times borrowed</div><div class="value">${ms.loanCount}</div></div>
+        <div class="stat"><div class="label">Total borrowed</div><div class="value">KES ${fmt(ms.totalBorrowed)}</div></div>
+        <div class="stat"><div class="label">Interest paid</div><div class="value green">KES ${fmt(ms.interestPaid)}</div></div>
+        <div class="stat"><div class="label">Outstanding</div><div class="value ${ms.outstanding?'amber':''}">${ms.outstanding ? 'KES '+fmt(ms.outstanding) : 'clear'}</div></div>
+      </div>
+      <div class="member-pool-bar">
+        <div class="member-pool-track"><div class="member-pool-fill" style="width:${pct}%"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);">${pct}% of pool</span>
+      </div>
+      ${removeBtn}
+    </div>`;
+  }).join('');
+  const addForm = isAdmin ? `<div class="card"><h2>Add a member</h2>
+      <form id="memberForm">
+        <div class="form-grid">
+          <div><label>Name</label><input type="text" name="name" required placeholder="e.g. Wanjiku"></div>
+          <div><label>Initial contribution (KES)</label><input type="number" name="contribution" min="0" step="50" required placeholder="2000"></div>
+        </div>
+        <button class="primary" type="submit">Add member</button>
+      </form></div>` : '';
+  return `<div class="panel active">${addForm}${rows || '<div class="empty-state">No members yet</div>'}</div>`;
+}
+
+function renderAddEntry(){
+  const rounds = [...new Set(DATA.loans.map(l=>l.round))];
+  const memberOptions = DATA.members.map(m=>`<option value="${escapeHtml(m.name)}">${escapeHtml(m.name)}</option>`).join('');
+  const roundOptions = rounds.map(r=>`<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join('');
+  return `<div class="panel active">
+    <div class="card"><h2>Record a new borrowing</h2>
+      <form id="loanForm">
+        <div class="form-grid">
+          <div><label>Borrower</label><select name="borrower" required><option value="">Choose member…</option>${memberOptions}</select></div>
+          <div><label>Round / cycle label</label><input type="text" name="round" list="roundList" placeholder="e.g. 5th Borrowing" required><datalist id="roundList">${roundOptions}</datalist></div>
+          <div><label>Amount borrowed (KES)</label><input type="number" name="principal" min="0" step="50" value="0" id="principalInput"></div>
+          <div><label>Interest rate (%)</label><input type="number" name="rate" min="0" step="0.5" value="${DATA.settings.defaultInterestRate}" id="rateInput"></div>
+          <div><label>Interest amount (KES)</label><input type="number" name="interestAmount" min="0" step="5" id="interestInput"></div>
+          <div><label>Status</label><select name="status"><option value="pending">Pending — not yet paid</option><option value="paid">Paid</option></select></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label>Notes (optional — e.g. interest split between members)</label>
+          <textarea name="notes" placeholder="Anything worth remembering about this entry…"></textarea>
+        </div>
+        <button class="primary" type="submit">Add to ledger</button>
+      </form>
+    </div>
+    <div class="card"><h2>Or just log an interest payment</h2>
+      <p style="font-size:13px;color:var(--ink-soft);margin-top:0;">For interest paid with no new principal — leave "Amount borrowed" at 0 and pick or type a round like "Interest Payment".</p>
+    </div>
+  </div>`;
+}
+
+function renderSettings(){
+  return `<div class="panel active">
+    <div class="card"><h2>Ledger settings</h2>
+      <form id="settingsForm">
+        <div class="form-grid">
+          <div><label>Default interest rate (%)</label><input type="number" name="defaultInterestRate" min="0" step="0.5" value="${DATA.settings.defaultInterestRate}"></div>
+          <div><label>Transaction cost adjustment (KES)</label><input type="number" name="transactionCostAdjustment" min="0" step="1" value="${DATA.settings.transactionCostAdjustment}"></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-soft);">Subtracted from total interest collected to get net amount generated — covers transfer fees across all rounds.</p>
+        <button class="primary" type="submit">Save settings</button>
+      </form>
+    </div>
+    <div class="card"><h2>Admin access</h2>
+      <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">
+        Admin accounts are created in the Firebase Console (Authentication → Users), not from this page — so there's no public sign-up to worry about. Only the UID listed in your Firestore security rules can write changes, no matter who signs in.
+      </p>
+    </div>
+  </div>`;
+}
+
+// ---------------------------------------------------------------------
+// Events
+// ---------------------------------------------------------------------
+function bindPanelEvents(){
+  document.querySelectorAll('.toggle-status').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.getAttribute('data-id');
+      const loan = DATA.loans.find(l=>l.id===id);
+      if (!loan) return;
+      loan.status = loan.status === 'paid' ? 'pending' : 'paid';
+      await persist();
+    });
+  });
+  document.querySelectorAll('.delete-loan').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      askConfirm('Remove this entry?', "This removes the loan record from the ledger for everyone. This can't be undone.", async ()=>{
+        DATA.loans = DATA.loans.filter(l=>l.id!==id);
+        await persist();
+      });
+    });
+  });
+  document.querySelectorAll('.remove-member').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      const m = DATA.members.find(x=>x.id===id);
+      askConfirm('Remove this member?', `This removes ${m?escapeHtml(m.name):'this member'} from the members list. Their past loan entries stay in the ledger.`, async ()=>{
+        DATA.members = DATA.members.filter(x=>x.id!==id);
+        await persist();
+      });
+    });
+  });
+  const memberForm = document.getElementById('memberForm');
+  if (memberForm){
+    memberForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(memberForm);
+      const name = (fd.get('name')||'').toString().trim();
+      const contribution = Number(fd.get('contribution')||0);
+      if (!name) return;
+      DATA.members.push({ id: uid('m'), name, contribution });
+      await persist();
+    });
+  }
+  const loanForm = document.getElementById('loanForm');
+  if (loanForm){
+    const principalInput = document.getElementById('principalInput');
+    const rateInput = document.getElementById('rateInput');
+    const interestInput = document.getElementById('interestInput');
+    function recalcInterest(){
+      const p = Number(principalInput.value||0), r = Number(rateInput.value||0);
+      interestInput.value = Math.round(p * r / 100);
+    }
+    principalInput.addEventListener('input', recalcInterest);
+    rateInput.addEventListener('input', recalcInterest);
+    recalcInterest();
+    loanForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(loanForm);
+      const borrower = (fd.get('borrower')||'').toString();
+      const round = (fd.get('round')||'').toString().trim();
+      if (!borrower || !round) return;
+      DATA.loans.push({
+        id: uid('l'), round, borrower,
+        principal: Number(fd.get('principal')||0),
+        interestAmount: Number(fd.get('interestAmount')||0),
+        status: (fd.get('status')||'pending').toString(),
+        notes: (fd.get('notes')||'').toString().trim()
+      });
+      await persist();
+      currentTab = 'loans';
+      renderNav();
+      render();
+    });
+  }
+  const settingsForm = document.getElementById('settingsForm');
+  if (settingsForm){
+    settingsForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(settingsForm);
+      DATA.settings.defaultInterestRate = Number(fd.get('defaultInterestRate')||0);
+      DATA.settings.transactionCostAdjustment = Number(fd.get('transactionCostAdjustment')||0);
+      await persist();
+    });
+  }
+}
+
+let confirmCallback = null;
+function askConfirm(title, body, onConfirm){
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmBody').textContent = body;
+  confirmCallback = onConfirm;
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+document.getElementById('confirmCancel').addEventListener('click', ()=>{
+  document.getElementById('confirmOverlay').classList.remove('show');
+  confirmCallback = null;
+});
+document.getElementById('confirmOk').addEventListener('click', async ()=>{
+  document.getElementById('confirmOverlay').classList.remove('show');
+  if (confirmCallback) await confirmCallback();
+  confirmCallback = null;
+});
+
+// ---------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------
+document.getElementById('todayDate').textContent =
+  new Date().toLocaleDateString('en-GB', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+renderNav();
+</script>
+</body>
+</html>
