@@ -359,6 +359,11 @@ const firebaseConfig = {
   measurementId: "G-6WWGSZ4TWK"
 };
 
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const docRef = db.collection('ledger').doc('data');
+
 // ---------------------------------------------------------------------
 // Data model
 // ---------------------------------------------------------------------
