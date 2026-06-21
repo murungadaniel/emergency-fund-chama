@@ -223,6 +223,14 @@ button.danger-text{
 button.danger-text:hover{ color:var(--stamp-red); }
 button:focus-visible, .stamp:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
 
+/* Icon button for edit */
+button.icon-btn{
+  background:none; border:1px solid var(--rule); border-radius:4px; cursor:pointer;
+  padding:4px 7px; color:var(--ink-soft); font-size:13px; line-height:1;
+  transition: border-color .15s, color .15s;
+}
+button.icon-btn:hover{ border-color:var(--ink); color:var(--ink); }
+
 .row-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
 .member-pool-bar{ display:flex; align-items:center; gap:10px; margin-top:8px; }
@@ -251,12 +259,48 @@ button:focus-visible, .stamp:focus-visible{ outline:2px solid var(--ink); outlin
 }
 .modal-overlay.show{ display:flex; }
 .modal{
-  background:var(--paper); border-radius:10px; padding:24px; max-width:380px; width:100%;
+  background:var(--paper); border-radius:10px; padding:24px; max-width:420px; width:100%;
   box-shadow:0 20px 50px rgba(0,0,0,0.3); border:1px solid var(--rule);
 }
 .modal h3{ font-family:'Special Elite', monospace; font-weight:400; margin:0 0 14px 0; font-size:16px; }
 .modal p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
 .modal .row-actions{ margin-top:18px; justify-content:flex-end; }
+
+/* ── Interest Leaderboard ─────────────────────────────── */
+.leaderboard{ display:flex; flex-direction:column; gap:0; }
+.lb-row{
+  display:flex; align-items:center; gap:14px;
+  padding:13px 12px; border-bottom:1px solid var(--rule);
+}
+.lb-row:last-child{ border-bottom:none; }
+.lb-rank{
+  font-size:22px; width:36px; flex-shrink:0; text-align:center;
+  line-height:1;
+}
+.lb-name{
+  font-family:'Special Elite', monospace; font-size:15px;
+  flex:1; color:var(--ink);
+}
+.lb-bar-wrap{ flex:2; height:8px; background:var(--rule); border-radius:4px; overflow:hidden; }
+.lb-bar-fill{ height:100%; border-radius:4px; background:var(--green); transition:width .5s ease; }
+.lb-bar-fill.rank2{ background:var(--stamp-amber); }
+.lb-bar-fill.rank3{ background:var(--ink-soft); }
+.lb-bar-fill.rankN{ background:var(--rule); }
+.lb-amount{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600;
+  color:var(--ink); white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.lb-pending{
+  font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--stamp-amber);
+  white-space:nowrap;
+}
+
+/* ── Contribution edit inline ─────────────────────────── */
+.contrib-row{ display:flex; align-items:center; gap:8px; margin-top:4px; }
+.contrib-inline-form{ display:none; align-items:center; gap:6px; margin-top:8px; }
+.contrib-inline-form.open{ display:flex; }
+.contrib-inline-form input{ width:110px; }
 
 @media (max-width:640px){
   .sheet{ padding:20px 16px 70px 36px; }
@@ -268,6 +312,7 @@ button:focus-visible, .stamp:focus-visible{ outline:2px solid var(--ink); outlin
   td::before{ content:attr(data-label); font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; color:var(--ink-faint); flex-shrink:0; }
   td.notes{ display:block; }
   td.notes::before{ display:block; margin-bottom:3px; }
+  .lb-bar-wrap{ display:none; }
 }
 
 .loading-msg{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); padding:20px 0; }
@@ -323,39 +368,10 @@ button:focus-visible, .stamp:focus-visible{ outline:2px solid var(--ink); outlin
       </div>
       <div>
         <label>Password</label>
-
-      <!-- edit loan modal -->
-      <div class="modal-overlay" id="editLoanOverlay">
-        <div class="modal">
-          <h3>Edit loan entry</h3>
-          <form id="editLoanForm">
-            <div style="margin-bottom:10px;">
-              <label>Borrower</label>
-              <select name="borrower" id="editBorrowerSelect" required></select>
-            </div>
-            <div style="margin-bottom:10px;">
-              <label>Round / cycle label</label>
-              <input type="text" name="round" id="editRoundInput" required>
-            </div>
-            <div style="display:flex;gap:10px;margin-bottom:10px;">
-              <div style="flex:1;"><label>Amount borrowed (KES)</label><input type="number" name="principal" id="editPrincipal" min="0" step="50"></div>
-              <div style="flex:1;"><label>Interest amount (KES)</label><input type="number" name="interestAmount" id="editInterest" min="0" step="5"></div>
-            </div>
-            <div style="margin-bottom:10px;"><label>Status</label>
-              <select name="status" id="editStatus"><option value="pending">Pending — not yet paid</option><option value="paid">Paid</option></select>
-            </div>
-            <div style="margin-bottom:10px;"><label>Notes (optional)</label><textarea name="notes" id="editNotes"></textarea></div>
-            <div class="row-actions">
-              <button type="button" class="ghost" id="editLoanCancel">Cancel</button>
-              <button type="submit" class="primary">Save changes</button>
-            </div>
-          </form>
-        </div>
-      </div>
         <input type="password" id="loginPassword" required autocomplete="current-password">
       </div>
       <p class="error-text" id="loginError" style="display:none;"></p>
-      <div class="row-actions">
+      <div class="row-actions" style="margin-top:14px;">
         <button type="button" class="ghost" id="loginCancel">Cancel</button>
         <button type="submit" class="primary" id="loginSubmit">Sign in</button>
       </div>
@@ -363,21 +379,73 @@ button:focus-visible, .stamp:focus-visible{ outline:2px solid var(--ink); outlin
   </div>
 </div>
 
-<!-- ===================================================================
-     FIREBASE SETUP — paste your project's config below, then delete
-     this comment block. See the setup walkthrough for where to get it
-     (Firebase Console > Project settings > General > Your apps).
-=================================================================== -->
+<!-- edit loan modal -->
+<div class="modal-overlay" id="editLoanOverlay">
+  <div class="modal">
+    <h3>Edit loan entry</h3>
+    <form id="editLoanForm">
+      <div style="margin-bottom:10px;">
+        <label>Borrower</label>
+        <select name="borrower" id="editBorrowerSelect" required></select>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label>Round / cycle label</label>
+        <input type="text" name="round" id="editRoundInput" required>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <div style="flex:1;"><label>Amount borrowed (KES)</label><input type="number" name="principal" id="editPrincipal" min="0" step="50"></div>
+        <div style="flex:1;"><label>Interest amount (KES)</label><input type="number" name="interestAmount" id="editInterest" min="0" step="5"></div>
+      </div>
+      <div style="margin-bottom:10px;"><label>Status</label>
+        <select name="status" id="editStatus">
+          <option value="pending">Pending — not yet paid</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px;"><label>Notes (optional)</label><textarea name="notes" id="editNotes"></textarea></div>
+      <div class="row-actions">
+        <button type="button" class="ghost" id="editLoanCancel">Cancel</button>
+        <button type="submit" class="primary">Save changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- edit contribution modal -->
+<div class="modal-overlay" id="editContribOverlay">
+  <div class="modal">
+    <h3 id="editContribTitle">Update contribution</h3>
+    <p style="font-size:13px; color:var(--ink-soft); margin-bottom:16px;">
+      Set the total capital contribution for this member. Use this to reflect top-ups or corrections.
+    </p>
+    <form id="editContribForm">
+      <div style="margin-bottom:14px;">
+        <label>Total contribution (KES)</label>
+        <input type="number" id="editContribAmount" min="0" step="50" required>
+      </div>
+      <div style="margin-bottom:6px;">
+        <label>Or add a top-up amount instead</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" id="editContribTopup" min="0" step="50" placeholder="e.g. 1000">
+          <button type="button" class="ghost" id="applyTopupBtn" style="white-space:nowrap;">Add to total</button>
+        </div>
+      </div>
+      <p style="font-size:11.5px; color:var(--ink-faint); margin:4px 0 16px 0;">
+        Clicking "Add to total" adds the top-up to the total field above — then save.
+      </p>
+      <div class="row-actions">
+        <button type="button" class="ghost" id="editContribCancel">Cancel</button>
+        <button type="submit" class="primary">Save contribution</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 
 <script>
-// =====================================================================
-// 1) PASTE YOUR FIREBASE CONFIG HERE (from Firebase Console)
-// =====================================================================
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyA5KLVGuACssk4a7HEBMh0tgisqyfmST7c",
   authDomain: "emergency-fund-ledger.firebaseapp.com",
@@ -393,9 +461,6 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const docRef = db.collection('ledger').doc('data');
 
-// ---------------------------------------------------------------------
-// Data model
-// ---------------------------------------------------------------------
 const DEFAULT_DATA = {
   members: [
     { id:'m1', name:'John',    contribution:2000 },
@@ -427,7 +492,7 @@ const DEFAULT_DATA = {
   ]
 };
 
-let DATA = null;          // null = not loaded / not yet initialized in Firestore
+let DATA = null;
 let isAdmin = false;
 let currentTab = 'dashboard';
 
@@ -503,7 +568,7 @@ docRef.onSnapshot(
   },
   (err)=>{
     console.error('Firestore read error', err);
-    DATA = undefined; // signals a connection/config error
+    DATA = undefined;
     render();
   }
 );
@@ -555,13 +620,19 @@ function memberStats(name){
   const loans = DATA.loans.filter(l=>l.borrower===name);
   const totalBorrowed = loans.reduce((s,l)=>s+Number(l.principal||0),0);
   const interestPaid = loans.filter(l=>l.status==='paid').reduce((s,l)=>s+Number(l.interestAmount||0),0);
-  // Outstanding should include both pending principal and pending interest
-  const outstanding = loans.filter(l=>l.status==='pending').reduce((s,l)=>s + Number(l.principal||0) + Number(l.interestAmount||0),0);
-  return { totalBorrowed, interestPaid, outstanding, loanCount: loans.length };
+  // Outstanding = pending principal + pending interest
+  const outstandingPrincipal = loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.principal||0),0);
+  const outstandingInterest  = loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const outstanding = outstandingPrincipal + outstandingInterest;
+  return { totalBorrowed, interestPaid, outstanding, outstandingPrincipal, outstandingInterest, loanCount: loans.length };
 }
 function fmt(n){ n = Number(n||0); return n.toLocaleString('en-KE', { maximumFractionDigits:0 }); }
 function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str == null ? '' : String(str); return d.innerHTML; }
 function stampRotation(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))%360; return (h%9)-4; }
+
+// Rank icons
+const RANK_ICONS = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+const RANK_CLASSES = ['rank1','rank2','rank3','rankN','rankN','rankN','rankN','rankN','rankN','rankN'];
 
 // ---------------------------------------------------------------------
 // Nav
@@ -626,28 +697,49 @@ function render(){
   bindPanelEvents();
 }
 
+// ── Dashboard ─────────────────────────────────────────────────────────
 function renderDashboard(){
   const s = computeStats();
-  const recent = [...DATA.loans].slice(-6).reverse();
+
+  // Build leaderboard: sort members by total interest paid (paid only)
+  const lbData = DATA.members.map(m=>{
+    const ms = memberStats(m.name);
+    return { name: m.name, interestPaid: ms.interestPaid, interestPending: ms.outstanding > 0 ? DATA.loans.filter(l=>l.borrower===m.name && l.status==='pending').reduce((a,l)=>a+Number(l.interestAmount||0),0) : 0 };
+  }).sort((a,b)=>b.interestPaid - a.interestPaid);
+
+  const maxInterest = lbData.length ? lbData[0].interestPaid || 1 : 1;
+
+  const lbRows = lbData.map((row, i)=>{
+    const pct = Math.round((row.interestPaid / maxInterest) * 100);
+    const icon = RANK_ICONS[i] || '—';
+    const barClass = RANK_CLASSES[i] || 'rankN';
+    const pendingTag = row.interestPending
+      ? `<span class="lb-pending">+KES ${fmt(row.interestPending)} pending</span>`
+      : '';
+    return `<div class="lb-row">
+      <div class="lb-rank">${icon}</div>
+      <div class="lb-name">${escapeHtml(row.name)}</div>
+      <div class="lb-bar-wrap"><div class="lb-bar-fill ${barClass}" style="width:${pct}%"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+        <div class="lb-amount">KES ${fmt(row.interestPaid)}</div>
+        ${pendingTag}
+      </div>
+    </div>`;
+  }).join('');
+
   const memberRows = DATA.members.map(m=>{
     const ms = memberStats(m.name);
+    const outstandingDisplay = ms.outstanding
+      ? `<span style="color:var(--stamp-amber)">KES ${fmt(ms.outstanding)}</span><br><span style="font-size:11px;color:var(--ink-faint);">(KES ${fmt(ms.outstandingPrincipal)} + KES ${fmt(ms.outstandingInterest)} int.)</span>`
+      : '—';
     return `<tr>
       <td data-label="Member">${escapeHtml(m.name)}</td>
       <td data-label="Borrowed" class="num">KES ${fmt(ms.totalBorrowed)}</td>
       <td data-label="Interest paid" class="num">KES ${fmt(ms.interestPaid)}</td>
-      <td data-label="Outstanding" class="num">${ms.outstanding ? 'KES '+fmt(ms.outstanding) : '—'}</td>
+      <td data-label="Outstanding" class="num">${outstandingDisplay}</td>
     </tr>`;
   }).join('');
-  const recentRows = recent.map(l=>{
-    const rot = stampRotation(l.id);
-    return `<tr>
-      <td data-label="Round"><span class="round-tag">${escapeHtml(l.round)}</span></td>
-      <td data-label="Borrower">${escapeHtml(l.borrower)}</td>
-      <td data-label="Principal" class="num">${l.principal ? 'KES '+fmt(l.principal) : '—'}</td>
-      <td data-label="Interest" class="num">KES ${fmt(l.interestAmount)}</td>
-      <td data-label="Status"><span class="stamp ${l.status}" style="transform:rotate(${rot}deg)">${l.status}</span></td>
-    </tr>`;
-  }).join('');
+
   return `<div class="panel active">
     <div class="stat-grid">
       <div class="stat"><div class="label">Pool (contributions)</div><div class="value">KES ${fmt(s.pool)}</div></div>
@@ -658,16 +750,19 @@ function renderDashboard(){
       <div class="stat"><div class="label">Interest pending</div><div class="value amber">KES ${fmt(s.interestPending)}</div></div>
     </div>
     <div class="card"><h2>By member <span class="count">${DATA.members.length}</span></h2>
-      <table><thead><tr><th>Member</th><th>Borrowed</th><th>Interest paid</th><th>Outstanding</th></tr></thead>
+      <table><thead><tr><th>Member</th><th>Borrowed</th><th>Interest paid</th><th>Outstanding (principal + interest)</th></tr></thead>
       <tbody>${memberRows || '<tr><td colspan="4"><div class="empty-state">No members yet</div></td></tr>'}</tbody></table>
     </div>
-    <div class="card"><h2>Recent entries <span class="count">last ${recent.length}</span></h2>
-      <table><thead><tr><th>Round</th><th>Borrower</th><th>Principal</th><th>Interest</th><th>Status</th></tr></thead>
-      <tbody>${recentRows || '<tr><td colspan="5"><div class="empty-state">No entries yet</div></td></tr>'}</tbody></table>
+    <div class="card">
+      <h2>Interest leaderboard <span class="count">who's contributed most to the pot</span></h2>
+      <div class="leaderboard">
+        ${lbRows || '<div class="empty-state">No interest recorded yet.</div>'}
+      </div>
     </div>
   </div>`;
 }
 
+// ── Loans ─────────────────────────────────────────────────────────────
 function renderLoans(){
   const grouped = {};
   DATA.loans.forEach(l=>{ if(!grouped[l.round]) grouped[l.round]=[]; grouped[l.round].push(l); });
@@ -677,15 +772,19 @@ function renderLoans(){
       const statusEl = isAdmin
         ? `<button class="stamp ${l.status} toggle-status" data-id="${l.id}" style="transform:rotate(${rot}deg)" title="Click to toggle paid/pending">${l.status}</button>`
         : `<span class="stamp ${l.status}" style="transform:rotate(${rot}deg)">${l.status}</span>`;
-        const removeBtn = isAdmin ? `<button class="danger-text delete-loan" data-id="${l.id}">remove</button>` : '';
-        const editBtn = isAdmin ? `<button class="ghost edit-loan" data-id="${l.id}">edit</button>` : '';
-        return `<tr data-id="${l.id}">
+      const actionBtns = isAdmin
+        ? `<div class="row-actions">
+            <button class="icon-btn edit-loan" data-id="${l.id}" title="Edit this entry">✏️</button>
+            <button class="danger-text delete-loan" data-id="${l.id}">remove</button>
+          </div>`
+        : '';
+      return `<tr data-id="${l.id}">
         <td data-label="Borrower">${escapeHtml(l.borrower)}</td>
         <td data-label="Principal" class="num">${l.principal ? 'KES '+fmt(l.principal) : '—'}</td>
         <td data-label="Interest" class="num">KES ${fmt(l.interestAmount)}</td>
         <td data-label="Status">${statusEl}</td>
         <td data-label="Notes" class="notes">${escapeHtml(l.notes) || '—'}</td>
-          <td data-label="">${editBtn} ${removeBtn}</td>
+        <td data-label="">${actionBtns}</td>
       </tr>`;
     }).join('');
     return `<div class="card"><h2>${escapeHtml(round)} <span class="count">${grouped[round].length} ${grouped[round].length===1?'entry':'entries'}</span></h2>
@@ -695,20 +794,33 @@ function renderLoans(){
   return `<div class="panel active">${sections || '<div class="empty-state">No loans recorded yet.</div>'}</div>`;
 }
 
+// ── Members ───────────────────────────────────────────────────────────
 function renderMembers(){
   const s = computeStats();
   const rows = DATA.members.map(m=>{
     const ms = memberStats(m.name);
     const pct = s.pool ? Math.round((m.contribution/s.pool)*100) : 0;
-    const removeBtn = isAdmin ? `<div class="row-actions" style="margin-top:14px;"><button class="danger-text remove-member" data-id="${m.id}">remove member</button></div>` : '';
+    const outstandingDisplay = ms.outstanding
+      ? `KES ${fmt(ms.outstanding)} <span style="font-size:11px;color:var(--ink-faint);">(KES ${fmt(ms.outstandingPrincipal)} principal + KES ${fmt(ms.outstandingInterest)} interest)</span>`
+      : 'clear';
+    const editContribBtn = isAdmin
+      ? `<button class="icon-btn edit-contrib" data-id="${m.id}" title="Update contribution" style="margin-left:6px;">✏️</button>`
+      : '';
+    const removeBtn = isAdmin
+      ? `<div style="margin-top:14px;"><button class="danger-text remove-member" data-id="${m.id}">remove member</button></div>`
+      : '';
     return `<div class="card" data-id="${m.id}">
-      <h2>${escapeHtml(m.name)} <span class="count">joined the pool with KES ${fmt(m.contribution)}</span></h2>
+      <h2>${escapeHtml(m.name)}
+        <span class="count">contributed KES ${fmt(m.contribution)}</span>
+        ${editContribBtn}
+      </h2>
       <div class="stat-grid" style="margin-bottom:10px;">
         <div class="stat"><div class="label">Times borrowed</div><div class="value">${ms.loanCount}</div></div>
         <div class="stat"><div class="label">Total borrowed</div><div class="value">KES ${fmt(ms.totalBorrowed)}</div></div>
         <div class="stat"><div class="label">Interest paid</div><div class="value green">KES ${fmt(ms.interestPaid)}</div></div>
-        <div class="stat"><div class="label">Outstanding</div><div class="value ${ms.outstanding?'amber':''}">${ms.outstanding ? 'KES '+fmt(ms.outstanding) : 'clear'}</div></div>
+        <div class="stat"><div class="label">Outstanding</div><div class="value ${ms.outstanding?'amber':''}" style="font-size:${ms.outstanding>9999?'15px':'21px'}">${ms.outstanding ? 'KES '+fmt(ms.outstanding) : 'clear'}</div></div>
       </div>
+      ${ms.outstanding ? `<p style="font-size:12px;color:var(--ink-faint);margin:0 0 8px 0;">Outstanding breakdown: KES ${fmt(ms.outstandingPrincipal)} principal + KES ${fmt(ms.outstandingInterest)} interest</p>` : ''}
       <div class="member-pool-bar">
         <div class="member-pool-track"><div class="member-pool-fill" style="width:${pct}%"></div></div>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);">${pct}% of pool</span>
@@ -716,17 +828,20 @@ function renderMembers(){
       ${removeBtn}
     </div>`;
   }).join('');
+
   const addForm = isAdmin ? `<div class="card"><h2>Add a member</h2>
-      <form id="memberForm">
-        <div class="form-grid">
-          <div><label>Name</label><input type="text" name="name" required placeholder="e.g. Wanjiku"></div>
-          <div><label>Initial contribution (KES)</label><input type="number" name="contribution" min="0" step="50" required placeholder="2000"></div>
-        </div>
-        <button class="primary" type="submit">Add member</button>
-      </form></div>` : '';
+    <form id="memberForm">
+      <div class="form-grid">
+        <div><label>Name</label><input type="text" name="name" required placeholder="e.g. Wanjiku"></div>
+        <div><label>Initial contribution (KES)</label><input type="number" name="contribution" min="0" step="50" required placeholder="2000"></div>
+      </div>
+      <button class="primary" type="submit">Add member</button>
+    </form></div>` : '';
+
   return `<div class="panel active">${addForm}${rows || '<div class="empty-state">No members yet</div>'}</div>`;
 }
 
+// ── Add Entry ──────────────────────────────────────────────────────────
 function renderAddEntry(){
   const rounds = [...new Set(DATA.loans.map(l=>l.round))];
   const memberOptions = DATA.members.map(m=>`<option value="${escapeHtml(m.name)}">${escapeHtml(m.name)}</option>`).join('');
@@ -755,6 +870,7 @@ function renderAddEntry(){
   </div>`;
 }
 
+// ── Settings ───────────────────────────────────────────────────────────
 function renderSettings(){
   return `<div class="panel active">
     <div class="card"><h2>Ledger settings</h2>
@@ -809,8 +925,13 @@ function bindPanelEvents(){
   });
   document.querySelectorAll('.edit-loan').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      const id = btn.getAttribute('data-id');
-      openEditLoanModal(id);
+      openEditLoanModal(btn.getAttribute('data-id'));
+    });
+  });
+  // Edit contribution buttons
+  document.querySelectorAll('.edit-contrib').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      openEditContribModal(btn.getAttribute('data-id'));
     });
   });
   const memberForm = document.getElementById('memberForm');
@@ -821,7 +942,6 @@ function bindPanelEvents(){
       const name = (fd.get('name')||'').toString().trim();
       const contribution = Number(fd.get('contribution')||0);
       if (!name) return;
-      // If member already exists (case-insensitive), add to their contribution
       const existing = DATA.members.find(m=>m.name && m.name.toLowerCase()===name.toLowerCase());
       if (existing){
         existing.contribution = Number(existing.contribution||0) + contribution;
@@ -875,7 +995,7 @@ function bindPanelEvents(){
 }
 
 // ---------------------------------------------------------------------
-// Edit loan modal helpers
+// Edit loan modal
 // ---------------------------------------------------------------------
 let editingLoanId = null;
 function openEditLoanModal(id){
@@ -917,6 +1037,48 @@ document.getElementById('editLoanForm').addEventListener('submit', async (e)=>{
   render();
 });
 
+// ---------------------------------------------------------------------
+// Edit contribution modal
+// ---------------------------------------------------------------------
+let editingMemberId = null;
+function openEditContribModal(id){
+  const m = DATA.members.find(x=>x.id===id);
+  if (!m) return;
+  editingMemberId = id;
+  document.getElementById('editContribTitle').textContent = `Update contribution — ${m.name}`;
+  document.getElementById('editContribAmount').value = m.contribution || 0;
+  document.getElementById('editContribTopup').value = '';
+  document.getElementById('editContribOverlay').classList.add('show');
+  document.getElementById('editContribAmount').focus();
+}
+function closeEditContribModal(){
+  document.getElementById('editContribOverlay').classList.remove('show');
+  editingMemberId = null;
+}
+document.getElementById('editContribCancel').addEventListener('click', closeEditContribModal);
+document.getElementById('applyTopupBtn').addEventListener('click', ()=>{
+  const current = Number(document.getElementById('editContribAmount').value||0);
+  const topup = Number(document.getElementById('editContribTopup').value||0);
+  if (topup > 0){
+    document.getElementById('editContribAmount').value = current + topup;
+    document.getElementById('editContribTopup').value = '';
+  }
+});
+document.getElementById('editContribForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if (!editingMemberId) return closeEditContribModal();
+  const m = DATA.members.find(x=>x.id===editingMemberId);
+  if (!m) return closeEditContribModal();
+  const newAmount = Number(document.getElementById('editContribAmount').value||0);
+  m.contribution = newAmount;
+  await persist();
+  closeEditContribModal();
+  render();
+});
+
+// ---------------------------------------------------------------------
+// Confirm modal
+// ---------------------------------------------------------------------
 let confirmCallback = null;
 function askConfirm(title, body, onConfirm){
   document.getElementById('confirmTitle').textContent = title;
