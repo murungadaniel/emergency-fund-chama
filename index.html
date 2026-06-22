@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE DREAM TEAM KENYA COMPANY</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper:#F3EEE0;
+  --paper-deep:#ECE5D2;
+  --rule:#D9CFB0;
+  --margin:#C0504D;
+  --ink:#1E2A3A;
+  --ink-soft:#5B6472;
+  --ink-faint:#8B8470;
+  --stamp-red:#A23B2E;
+  --stamp-amber:#A87617;
+  --green:#3F6B4A;
+  --green-light:#e8f0ea;
+  --red-light:#fdecea;
+  --card-shadow: 0 1px 0 rgba(30,42,58,0.06), 0 6px 16px rgba(30,42,58,0.06);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  background-image: repeating-linear-gradient(to bottom,transparent 0px,transparent 33px,var(--rule) 34px);
+  color:var(--ink);
+  font-family:'IBM Plex Sans', sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:1020px;margin:0 auto;padding:28px 28px 80px 64px;position:relative;}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:40px;width:1px;background:var(--margin);opacity:0.55;}
+
+.auth-bar{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
+.auth-bar .you{color:var(--green);font-weight:600;}
+
+header.masthead{padding-bottom:18px;margin-bottom:22px;border-bottom:2px solid var(--ink);}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-faint);margin:0 0 6px 0;}
+h1.title{font-family:'Special Elite',monospace;font-size:32px;font-weight:400;letter-spacing:0.5px;margin:0 0 6px 0;color:var(--ink);}
+.tagline{font-size:14px;color:var(--ink-soft);margin:0;font-style:italic;}
+
+nav.tabs{display:flex;gap:4px;margin:20px 0 24px 0;flex-wrap:wrap;}
+.tab-btn{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.5px;background:var(--paper-deep);border:1px solid var(--rule);border-bottom:none;color:var(--ink-soft);padding:9px 14px 8px 14px;cursor:pointer;border-radius:5px 5px 0 0;position:relative;top:1px;}
+.tab-btn:hover{color:var(--ink);}
+.tab-btn.active{background:var(--paper);color:var(--ink);font-weight:600;border-bottom:1px solid var(--paper);box-shadow:0 -2px 0 var(--margin) inset;}
+.tab-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+.panel{display:none;}
+.panel.active{display:block;animation:fadein .18s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(2px);}to{opacity:1;transform:none;}}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--ink);border:1px solid var(--ink);margin-bottom:28px;border-radius:6px;overflow:hidden;}
+.stat{background:var(--paper);padding:14px 16px;}
+.stat .label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px;}
+.stat .value{font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.stat .value.green{color:var(--green);}
+.stat .value.amber{color:var(--stamp-amber);}
+.stat .value.red{color:var(--stamp-red);}
+
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:8px;box-shadow:var(--card-shadow);padding:20px;margin-bottom:22px;}
+.card h2{font-family:'Special Elite',monospace;font-weight:400;font-size:17px;margin:0 0 14px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.card h2 .count{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);font-weight:400;}
+
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-faint);padding:0 10px 8px 10px;border-bottom:1px solid var(--ink);font-weight:500;}
+td{padding:11px 10px;border-bottom:1px solid var(--rule);font-size:13.5px;vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+td.notes{color:var(--ink-soft);font-size:12.5px;max-width:220px;}
+.round-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);background:var(--paper-deep);padding:2px 7px;border-radius:3px;white-space:nowrap;}
+
+.stamp{display:inline-block;padding:2px 9px;border:2px solid currentColor;border-radius:4px;font-family:'Special Elite',monospace;font-size:10.5px;letter-spacing:1.3px;text-transform:uppercase;transform:rotate(-5deg);opacity:0.88;mix-blend-mode:multiply;background:none;}
+.stamp.paid{color:var(--stamp-red);}
+.stamp.pending{color:var(--stamp-amber);border-style:dashed;transform:rotate(-3deg);}
+button.stamp{cursor:pointer;}
+button.stamp:hover{opacity:1;}
+
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px;}
+label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px;}
+input,select,textarea{width:100%;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;padding:8px 10px;border:1px solid var(--rule);border-radius:5px;background:#fff;color:var(--ink);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:1px;border-color:var(--ink);}
+textarea{resize:vertical;min-height:38px;}
+
+button.primary{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:0.6px;background:var(--ink);color:var(--paper);border:none;padding:10px 18px;border-radius:5px;cursor:pointer;text-transform:uppercase;}
+button.primary:hover{background:#0f1822;}
+button.primary:disabled{opacity:0.5;cursor:not-allowed;}
+button.ghost{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:none;border:1px solid var(--rule);color:var(--ink-soft);padding:7px 12px;border-radius:5px;cursor:pointer;}
+button.ghost:hover{border-color:var(--ink);color:var(--ink);}
+button.danger-text{font-family:'IBM Plex Mono',monospace;font-size:11px;background:none;border:none;color:var(--ink-faint);cursor:pointer;text-decoration:underline;padding:0;}
+button.danger-text:hover{color:var(--stamp-red);}
+button.icon-btn{background:none;border:1px solid var(--rule);border-radius:4px;cursor:pointer;padding:4px 7px;color:var(--ink-soft);font-size:13px;line-height:1;transition:border-color .15s,color .15s;}
+button.icon-btn:hover{border-color:var(--ink);color:var(--ink);}
+button:focus-visible,.stamp:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+.row-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.member-pool-bar{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.member-pool-track{flex:1;height:6px;background:var(--rule);border-radius:3px;overflow:hidden;}
+.member-pool-fill{height:100%;background:var(--green);}
+.empty-state{text-align:center;padding:30px 10px;color:var(--ink-faint);font-size:13px;font-family:'IBM Plex Mono',monospace;}
+.note-banner{font-size:12px;color:var(--ink-soft);background:var(--paper-deep);border:1px dashed var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:20px;line-height:1.5;}
+.error-text{color:var(--stamp-red);font-size:12.5px;margin-top:8px;}
+
+.save-pill{position:fixed;bottom:18px;right:18px;font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:50;}
+.save-pill.show{opacity:0.92;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(30,42,58,0.45);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--paper);border-radius:10px;padding:24px;max-width:440px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.3);border:1px solid var(--rule);max-height:90vh;overflow-y:auto;}
+.modal h3{font-family:'Special Elite',monospace;font-weight:400;margin:0 0 14px 0;font-size:16px;}
+.modal p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+.modal .row-actions{margin-top:18px;justify-content:flex-end;}
+
+/* Leaderboard */
+.leaderboard{display:flex;flex-direction:column;gap:0;}
+.lb-row{display:flex;align-items:center;gap:14px;padding:13px 12px;border-bottom:1px solid var(--rule);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-size:22px;width:36px;flex-shrink:0;text-align:center;line-height:1;}
+.lb-name{font-family:'Special Elite',monospace;font-size:15px;flex:1;color:var(--ink);}
+.lb-bar-wrap{flex:2;height:8px;background:var(--rule);border-radius:4px;overflow:hidden;}
+.lb-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .5s ease;}
+.lb-bar-fill.rank2{background:var(--stamp-amber);}
+.lb-bar-fill.rank3{background:var(--ink-soft);}
+.lb-bar-fill.rankN{background:var(--rule);}
+.lb-amount{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.lb-pending{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--stamp-amber);white-space:nowrap;}
+
+/* Borrowing Limit Bar */
+.limit-bar-wrap{margin-top:10px;}
+.limit-bar-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);margin-bottom:4px;}
+.limit-track{width:100%;height:10px;background:var(--rule);border-radius:5px;overflow:hidden;position:relative;}
+.limit-fill-max{height:100%;background:var(--green);opacity:0.25;position:absolute;left:0;top:0;}
+.limit-fill-avail{height:100%;background:var(--green);position:absolute;left:0;top:0;border-radius:5px;}
+.limit-fill-used{height:100%;background:var(--stamp-red);opacity:0.7;position:absolute;top:0;border-radius:0 5px 5px 0;}
+.limit-pills{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.limit-pill{font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:3px 9px;border-radius:12px;white-space:nowrap;}
+.limit-pill.max{background:#e8f0ea;color:var(--green);border:1px solid #b8d4bf;}
+.limit-pill.avail{background:#fff8e8;color:var(--stamp-amber);border:1px solid #e4cc8a;}
+.limit-pill.used{background:#fdecea;color:var(--stamp-red);border:1px solid #e8b0ab;}
+
+/* Capital Contributions grid */
+.contrib-grid-wrap{overflow-x:auto;margin-top:4px;}
+.contrib-grid{border-collapse:collapse;min-width:600px;}
+.contrib-grid th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-faint);padding:6px 8px;border-bottom:1px solid var(--ink);text-align:center;white-space:nowrap;}
+.contrib-grid th.name-col{text-align:left;}
+.contrib-grid td{padding:6px 8px;border-bottom:1px solid var(--rule);font-size:12.5px;text-align:center;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.contrib-grid td.name-col{text-align:left;font-family:'Special Elite',monospace;font-size:14px;}
+.contrib-grid tr:last-child td{border-bottom:none;}
+.contrib-cell.paid{background:var(--green-light);color:var(--green);}
+.contrib-cell.missed{background:var(--red-light);color:var(--stamp-red);}
+.contrib-cell.future{color:var(--ink-faint);background:transparent;}
+.contrib-cell.partial{background:#fff8e8;color:var(--stamp-amber);}
+.contrib-cell button{background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:2px 4px;border-radius:3px;width:100%;text-align:center;}
+.contrib-cell button:hover{background:rgba(0,0,0,0.06);}
+
+/* Consistency stars */
+.consistency-badge{font-size:11px;letter-spacing:0;white-space:nowrap;}
+.star-full{color:#c9a227;}
+.star-empty{color:var(--rule);}
+
+/* Projection Chart */
+.chart-wrap{position:relative;width:100%;}
+canvas#projChart{width:100%!important;max-height:320px;}
+.chart-legend{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap;}
+.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;}
+
+@media(max-width:640px){
+  .sheet{padding:20px 16px 70px 36px;}
+  .sheet::before{left:18px;}
+  table thead{display:none;}
+  table,tbody,tr,td{display:block;width:100%;}
+  tr{border-bottom:1px solid var(--rule);padding:10px 0;}
+  td{border:none;padding:3px 0;display:flex;justify-content:space-between;gap:10px;}
+  td::before{content:attr(data-label);font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--ink-faint);flex-shrink:0;}
+  td.notes{display:block;}
+  td.notes::before{display:block;margin-bottom:3px;}
+  .lb-bar-wrap{display:none;}
+  .contrib-grid-wrap{margin:0 -10px;}
+}
+.loading-msg{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);padding:20px 0;}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="auth-bar">
+    <span id="authStatus">Checking sign-in…</span>
+    <button class="ghost" id="authBtn">Admin sign in</button>
+  </div>
+  <header class="masthead">
+    <p class="eyebrow" id="todayDate">—</p>
+    <h1 class="title">THE DREAM TEAM KENYA COMPANY</h1>
+    <p class="tagline">What we put in, what gets borrowed, what comes back with interest.</p>
+  </header>
+  <div class="note-banner">Anyone with this link can view the ledger. Only the signed-in admin can add, edit, or remove entries.</div>
+  <nav class="tabs" role="tablist" id="tabNav"></nav>
+  <div id="appRoot"><p class="loading-msg">Opening the ledger…</p></div>
+</div>
+<div class="save-pill" id="savePill">Saved to ledger</div>
+
+<!-- confirm modal -->
+<div class="modal-overlay" id="confirmOverlay">
+  <div class="modal">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmBody"></p>
+    <div class="row-actions"><button class="ghost" id="confirmCancel">Cancel</button><button class="primary" id="confirmOk">Confirm</button></div>
+  </div>
+</div>
+<!-- login modal -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal">
+    <h3>Admin sign in</h3>
+    <form id="loginForm">
+      <div style="margin-bottom:10px;"><label>Email</label><input type="email" id="loginEmail" required autocomplete="username"></div>
+      <div><label>Password</label><input type="password" id="loginPassword" required autocomplete="current-password"></div>
+      <p class="error-text" id="loginError" style="display:none;"></p>
+      <div class="row-actions" style="margin-top:14px;">
+        <button type="button" class="ghost" id="loginCancel">Cancel</button>
+        <button type="submit" class="primary" id="loginSubmit">Sign in</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- edit loan modal -->
+<div class="modal-overlay" id="editLoanOverlay">
+  <div class="modal">
+    <h3>Edit loan entry</h3>
+    <form id="editLoanForm">
+      <div style="margin-bottom:10px;"><label>Borrower</label><select name="borrower" id="editBorrowerSelect" required></select></div>
+      <div style="margin-bottom:10px;"><label>Round / cycle label</label><input type="text" name="round" id="editRoundInput" required></div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <div style="flex:1;"><label>Amount borrowed (KES)</label><input type="number" name="principal" id="editPrincipal" min="0" step="50"></div>
+        <div style="flex:1;"><label>Interest amount (KES)</label><input type="number" name="interestAmount" id="editInterest" min="0" step="5"></div>
+      </div>
+      <div style="margin-bottom:10px;"><label>Status</label>
+        <select name="status" id="editStatus"><option value="pending">Pending</option><option value="paid">Paid</option></select>
+      </div>
+      <div style="margin-bottom:10px;"><label>Notes (optional)</label><textarea name="notes" id="editNotes"></textarea></div>
+      <div class="row-actions"><button type="button" class="ghost" id="editLoanCancel">Cancel</button><button type="submit" class="primary">Save changes</button></div>
+    </form>
+  </div>
+</div>
+<!-- edit contribution modal -->
+<div class="modal-overlay" id="editContribOverlay">
+  <div class="modal">
+    <h3 id="editContribTitle">Update contribution</h3>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px;">Set the total capital contribution. Use top-up for adding to current amount.</p>
+    <form id="editContribForm">
+      <div style="margin-bottom:14px;"><label>Total contribution (KES)</label><input type="number" id="editContribAmount" min="0" step="50" required></div>
+      <div style="margin-bottom:6px;"><label>Or add a top-up amount</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" id="editContribTopup" min="0" step="50" placeholder="e.g. 1000">
+          <button type="button" class="ghost" id="applyTopupBtn" style="white-space:nowrap;">Add to total</button>
+        </div>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-faint);margin:4px 0 16px 0;">Click "Add to total" then save.</p>
+      <div class="row-actions"><button type="button" class="ghost" id="editContribCancel">Cancel</button><button type="submit" class="primary">Save contribution</button></div>
+    </form>
+  </div>
+</div>
+<!-- edit monthly contrib modal -->
+<div class="modal-overlay" id="editMonthlyOverlay">
+  <div class="modal">
+    <h3 id="editMonthlyTitle">Edit monthly contribution</h3>
+    <form id="editMonthlyForm">
+      <div style="margin-bottom:12px;"><label>Amount paid (KES) — 0 = missed</label><input type="number" id="editMonthlyAmount" min="0" step="50"></div>
+      <div style="margin-bottom:12px;"><label>Status</label>
+        <select id="editMonthlyStatus">
+          <option value="paid">Paid ✓</option>
+          <option value="partial">Partial payment</option>
+          <option value="missed">Missed ✗</option>
+          <option value="future">Not yet due</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;"><label>Note (optional)</label><input type="text" id="editMonthlyNote" placeholder="e.g. paid via M-Pesa"></div>
+      <div class="row-actions"><button type="button" class="ghost" id="editMonthlyCancel">Cancel</button><button type="submit" class="primary">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA5KLVGuACssk4a7HEBMh0tgisqyfmST7c",
+  authDomain: "emergency-fund-ledger.firebaseapp.com",
+  projectId: "emergency-fund-ledger",
+  storageBucket: "emergency-fund-ledger.firebasestorage.app",
+  messagingSenderId: "1098106980667",
+  appId: "1:1098106980667:web:0c1cf0ca9764da6e940f1e",
+  measurementId: "G-6WWGSZ4TWK"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const docRef = db.collection('ledger').doc('data');
+
+// Months the group tracks (start Feb 2026)
+const ALL_MONTHS = [
+  '2026-01','2026-02','2026-03','2026-04','2026-05','2026-06',
+  '2026-07','2026-08','2026-09','2026-10','2026-11','2026-12',
+  '2027-01','2027-02','2027-03','2027-04','2027-05','2027-06',
+  '2027-07','2027-08','2027-09','2027-10','2027-11','2027-12'
+];
+const MONTH_LABELS = {
+  '2026-01':'Jan 26','2026-02':'Feb 26','2026-03':'Mar 26',
+  '2026-04':'Apr 26','2026-05':'May 26','2026-06':'Jun 26',
+  '2026-07':'Jul 26','2026-08':'Aug 26','2026-09':'Sep 26',
+  '2026-10':'Oct 26','2026-11':'Nov 26','2026-12':'Dec 26',
+  '2027-01':'Jan 27','2027-02':'Feb 27','2027-03':'Mar 27',
+  '2027-04':'Apr 27','2027-05':'May 27','2027-06':'Jun 27',
+  '2027-07':'Jul 27','2027-08':'Aug 27','2027-09':'Sep 27',
+  '2027-10':'Oct 27','2027-11':'Nov 27','2027-12':'Dec 27'
+};
+const MONTHLY_TARGET = 2000; // default monthly contribution per member
+
+const DEFAULT_DATA = {
+  members:[
+    {id:'m1',name:'John',contribution:2000},
+    {id:'m2',name:'Daniel',contribution:2000},
+    {id:'m3',name:'Brian',contribution:2000},
+    {id:'m4',name:'Grace',contribution:2000},
+    {id:'m5',name:'Chiroli',contribution:2000},
+  ],
+  settings:{defaultInterestRate:10,transactionCostAdjustment:295,monthlyTarget:2000,startMonth:'2026-02'},
+  loans:[
+    {id:'l1',round:'1st Borrowing',borrower:'Daniel',principal:2000,interestAmount:200,status:'paid',notes:''},
+    {id:'l2',round:'1st Borrowing',borrower:'Grace',principal:2000,interestAmount:200,status:'paid',notes:''},
+    {id:'l3',round:'1st Borrowing',borrower:'Brian',principal:1000,interestAmount:100,status:'paid',notes:''},
+    {id:'l4',round:'1st Borrowing',borrower:'John',principal:600,interestAmount:60,status:'paid',notes:''},
+    {id:'l5',round:'1st Borrowing',borrower:'Chiroli',principal:2000,interestAmount:200,status:'pending',notes:'Payment still in progress'},
+    {id:'l6',round:'2nd Borrowing',borrower:'Daniel',principal:2000,interestAmount:200,status:'paid',notes:''},
+    {id:'l7',round:'2nd Borrowing',borrower:'Brian',principal:500,interestAmount:50,status:'paid',notes:''},
+    {id:'l8',round:'2nd Borrowing',borrower:'Grace',principal:500,interestAmount:50,status:'paid',notes:''},
+    {id:'l9',round:'2nd Borrowing',borrower:'John',principal:1000,interestAmount:100,status:'paid',notes:''},
+    {id:'l10',round:'3rd Borrowing',borrower:'Daniel',principal:4500,interestAmount:450,status:'paid',notes:'Borrowed on behalf of the group; interest shared back — Grace 200, John 150, Brian 100.'},
+    {id:'l11',round:'3rd Borrowing',borrower:'Daniel',principal:1000,interestAmount:100,status:'paid',notes:"Borrowed from John's contribution; interest credited to John."},
+    {id:'l12',round:'Interest Payment',borrower:'Daniel',principal:0,interestAmount:200,status:'paid',notes:'Interest paid this month on previous borrowing.'},
+    {id:'l13',round:'4th Borrowing',borrower:'John',principal:2000,interestAmount:200,status:'pending',notes:'Not yet paid'},
+    {id:'l14',round:'4th Borrowing',borrower:'Grace',principal:2000,interestAmount:200,status:'pending',notes:'Not yet paid'},
+    {id:'l15',round:'4th Borrowing',borrower:'Daniel',principal:1500,interestAmount:150,status:'pending',notes:'Not yet paid'},
+  ],
+  // monthlyContribs: { memberId: { 'YYYY-MM': { status:'paid'|'missed'|'partial'|'future', amount:2000, note:'' } } }
+  monthlyContribs: {
+    'm1':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'paid',amount:2000,note:''},'2026-04':{status:'paid',amount:500,note:'Partial'},'2026-05':{status:'missed',amount:0,note:''}},
+    'm2':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'paid',amount:2000,note:''},'2026-04':{status:'paid',amount:2000,note:''},'2026-05':{status:'paid',amount:2000,note:''}},
+    'm3':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'missed',amount:0,note:''},'2026-04':{status:'missed',amount:0,note:''},'2026-05':{status:'missed',amount:0,note:''}},
+    'm4':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'paid',amount:2000,note:''},'2026-04':{status:'paid',amount:2000,note:''},'2026-05':{status:'paid',amount:2000,note:''}},
+    'm5':{'2026-02':{status:'missed',amount:0,note:''},'2026-03':{status:'missed',amount:0,note:''},'2026-04':{status:'missed',amount:0,note:''},'2026-05':{status:'missed',amount:0,note:''}},
+  }
+};
+
+let DATA = null;
+let isAdmin = false;
+let currentTab = 'dashboard';
+let projChartInstance = null;
+
+// Auth
+auth.onAuthStateChanged(user=>{
+  isAdmin=!!user;
+  const statusEl=document.getElementById('authStatus');
+  const btn=document.getElementById('authBtn');
+  if(isAdmin){
+    statusEl.innerHTML='Signed in as <span class="you">'+escapeHtml(user.email)+'</span>';
+    btn.textContent='Sign out';
+  }else{
+    statusEl.textContent='Viewing — read only';
+    btn.textContent='Admin sign in';
+    if(['add','settings'].includes(currentTab)) currentTab='dashboard';
+  }
+  renderNav(); render();
+});
+document.getElementById('authBtn').addEventListener('click',()=>{
+  if(isAdmin) auth.signOut(); else openLoginModal();
+});
+function openLoginModal(){
+  document.getElementById('loginError').style.display='none';
+  document.getElementById('loginForm').reset();
+  document.getElementById('loginOverlay').classList.add('show');
+  document.getElementById('loginEmail').focus();
+}
+function closeLoginModal(){ document.getElementById('loginOverlay').classList.remove('show'); }
+document.getElementById('loginCancel').addEventListener('click',closeLoginModal);
+document.getElementById('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  const errEl=document.getElementById('loginError');
+  const btn=document.getElementById('loginSubmit');
+  errEl.style.display='none'; btn.disabled=true; btn.textContent='Signing in…';
+  try{ await auth.signInWithEmailAndPassword(email,password); closeLoginModal(); }
+  catch(err){ errEl.textContent=humanAuthError(err); errEl.style.display='block'; }
+  finally{ btn.disabled=false; btn.textContent='Sign in'; }
+});
+function humanAuthError(err){
+  const c=err&&err.code;
+  if(['auth/invalid-credential','auth/wrong-password','auth/user-not-found'].includes(c)) return 'Email or password not recognized.';
+  if(c==='auth/too-many-requests') return 'Too many attempts — wait a moment.';
+  if(c==='auth/invalid-email') return 'Invalid email address.';
+  return 'Could not sign in ('+(c||'unknown')+').';
+}
+
+// Firestore
+docRef.onSnapshot(doc=>{
+  DATA=doc.exists?doc.data():null;
+  if(DATA && !DATA.monthlyContribs) DATA.monthlyContribs={};
+  if(DATA && !DATA.settings.monthlyTarget) DATA.settings.monthlyTarget=2000;
+  if(DATA && !DATA.settings.startMonth) DATA.settings.startMonth='2026-02';
+  render();
+},err=>{ console.error(err); DATA=undefined; render(); });
+
+let saveTimer=null;
+async function persist(){
+  try{ await docRef.set(DATA); flashSaved(); }
+  catch(e){ console.error(e); flashSaved(true); }
+}
+function flashSaved(failed){
+  const p=document.getElementById('savePill');
+  p.textContent=failed?'Could not save — check connection':'Saved to ledger';
+  p.classList.add('show'); clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>p.classList.remove('show'),1600);
+}
+async function seedLedger(useDefaults){
+  const initial=useDefaults?JSON.parse(JSON.stringify(DEFAULT_DATA)):{members:[],loans:[],monthlyContribs:{},settings:{defaultInterestRate:10,transactionCostAdjustment:0,monthlyTarget:2000,startMonth:'2026-02'}};
+  try{ await docRef.set(initial); }catch(e){ alert('Could not set up: '+e.message); }
+}
+function uid(p){ return p+'_'+Math.random().toString(36).slice(2,9); }
+
+// Computations
+function computeStats(){
+  const pool=DATA.members.reduce((s,m)=>s+Number(m.contribution||0),0);
+  const outstandingPrincipal=DATA.loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.principal||0),0);
+  const interestPaid=DATA.loans.filter(l=>l.status==='paid').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const interestPending=DATA.loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const txnCost=Number(DATA.settings.transactionCostAdjustment||0);
+  const netGenerated=interestPaid-txnCost;
+  return{pool,outstandingPrincipal,interestPaid,interestPending,txnCost,netGenerated};
+}
+function memberStats(name){
+  const loans=DATA.loans.filter(l=>l.borrower===name);
+  const totalBorrowed=loans.reduce((s,l)=>s+Number(l.principal||0),0);
+  const interestPaid=loans.filter(l=>l.status==='paid').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const outstandingPrincipal=loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.principal||0),0);
+  const outstandingInterest=loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+  const outstanding=outstandingPrincipal+outstandingInterest;
+  return{totalBorrowed,interestPaid,outstanding,outstandingPrincipal,outstandingInterest,loanCount:loans.length};
+}
+function memberLimit(m){
+  const ms=memberStats(m.name);
+  // Max limit = initial contribution + all interest ever paid back
+  const maxLimit=Number(m.contribution||0)+ms.interestPaid;
+  // Current available = maxLimit - outstanding debt
+  const available=Math.max(0,maxLimit-ms.outstanding);
+  return{maxLimit,available,used:ms.outstanding};
+}
+function getMemberMonthlyContribs(memberId){
+  return (DATA.monthlyContribs&&DATA.monthlyContribs[memberId])||{};
+}
+function consistencyScore(memberId){
+  const mc=getMemberMonthlyContribs(memberId);
+  const today=new Date();
+  const currentKey=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
+  const pastMonths=ALL_MONTHS.filter(m=>m<=currentKey);
+  if(!pastMonths.length) return{pct:100,paid:0,total:0};
+  let paid=0;
+  pastMonths.forEach(m=>{
+    const c=mc[m];
+    if(c&&(c.status==='paid'||c.status==='partial')) paid++;
+  });
+  return{pct:Math.round((paid/pastMonths.length)*100),paid,total:pastMonths.length};
+}
+function renderStars(pct){
+  const filled=Math.round(pct/20); // 0-5 stars
+  let s='';
+  for(let i=0;i<5;i++) s+=i<filled?'<span class="star-full">★</span>':'<span class="star-empty">★</span>';
+  return'<span class="consistency-badge">'+s+'</span>';
+}
+function currentMonthKey(){
+  const t=new Date();
+  return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0');
+}
+
+// Track months to display (from settings.startMonth to today+2)
+function getDisplayMonths(){
+  const start=DATA.settings.startMonth||'2026-02';
+  const today=new Date();
+  const endDate=new Date(today.getFullYear(),today.getMonth()+2,1);
+  const months=[];
+  ALL_MONTHS.forEach(m=>{
+    if(m>=start){
+      const [y,mo]=m.split('-');
+      const d=new Date(Number(y),Number(mo)-1,1);
+      if(d<=endDate) months.push(m);
+    }
+  });
+  return months;
+}
+
+function fmt(n){ n=Number(n||0); return n.toLocaleString('en-KE',{maximumFractionDigits:0}); }
+function escapeHtml(str){ const d=document.createElement('div'); d.textContent=str==null?'':String(str); return d.innerHTML; }
+function stampRotation(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))%360; return(h%9)-4; }
+
+const RANK_ICONS=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+const RANK_CLASSES=['rank1','rank2','rank3','rankN','rankN','rankN','rankN','rankN','rankN','rankN'];
+
+// ── Nav ───────────────────────────────────────────────────────────────
+function renderNav(){
+  const tabs=[
+    {id:'dashboard',label:'Dashboard'},
+    {id:'loans',label:'Loans'},
+    {id:'members',label:'Members'},
+    {id:'capital',label:'Capital'},
+    {id:'projection',label:'Projection'},
+  ];
+  if(isAdmin){
+    tabs.push({id:'add',label:'+ New Entry'});
+    tabs.push({id:'settings',label:'Settings'});
+  }
+  const nav=document.getElementById('tabNav');
+  nav.innerHTML=tabs.map(t=>`<button class="tab-btn ${currentTab===t.id?'active':''}" data-tab="${t.id}">${t.label}</button>`).join('');
+  nav.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{ currentTab=btn.getAttribute('data-tab'); renderNav(); render(); });
+  });
+}
+
+// Render 
+function render(){
+  const root=document.getElementById('appRoot');
+  if(DATA===undefined){
+    root.innerHTML=`<div class="card"><h2>Can't reach the ledger</h2><p style="font-size:13px;color:var(--ink-soft);">Check Firebase config, internet connection, and that Firestore is enabled.</p></div>`;
+    return;
+  }
+  if(DATA===null){
+    root.innerHTML=isAdmin
+      ?`<div class="card"><h2>Set up the ledger</h2><p style="font-size:13px;color:var(--ink-soft);">No data yet. Load historical records or start blank.</p><div class="row-actions"><button class="primary" id="seedDefaultBtn">Load historical data</button><button class="ghost" id="seedEmptyBtn">Start empty</button></div></div>`
+      :`<div class="empty-state">The ledger hasn't been set up yet. Ask the admin to sign in.</div>`;
+    if(isAdmin){
+      const d=document.getElementById('seedDefaultBtn');
+      const e=document.getElementById('seedEmptyBtn');
+      if(d) d.addEventListener('click',()=>seedLedger(true));
+      if(e) e.addEventListener('click',()=>seedLedger(false));
+    }
+    return;
+  }
+  if(projChartInstance){ projChartInstance.destroy(); projChartInstance=null; }
+  if(currentTab==='dashboard') root.innerHTML=renderDashboard();
+  else if(currentTab==='loans') root.innerHTML=renderLoans();
+  else if(currentTab==='members') root.innerHTML=renderMembers();
+  else if(currentTab==='capital') root.innerHTML=renderCapital();
+  else if(currentTab==='projection') root.innerHTML=renderProjection();
+  else if(currentTab==='add'&&isAdmin) root.innerHTML=renderAddEntry();
+  else if(currentTab==='settings'&&isAdmin) root.innerHTML=renderSettings();
+  else{ currentTab='dashboard'; root.innerHTML=renderDashboard(); }
+  bindPanelEvents();
+  if(currentTab==='projection') buildProjectionChart();
+}
+
+// Dashboard 
+function renderDashboard(){
+  const s=computeStats();
+  const lbData=DATA.members.map(m=>{
+    const ms=memberStats(m.name);
+    const pendingInt=DATA.loans.filter(l=>l.borrower===m.name&&l.status==='pending').reduce((a,l)=>a+Number(l.interestAmount||0),0);
+    return{name:m.name,interestPaid:ms.interestPaid,interestPending:pendingInt};
+  }).sort((a,b)=>b.interestPaid-a.interestPaid);
+  const maxInt=lbData.length?lbData[0].interestPaid||1:1;
+  const lbRows=lbData.map((row,i)=>{
+    const pct=Math.round((row.interestPaid/maxInt)*100);
+    const pendingTag=row.interestPending?`<span class="lb-pending">+KES ${fmt(row.interestPending)} pending</span>`:'';
+    return`<div class="lb-row">
+      <div class="lb-rank">${RANK_ICONS[i]||'—'}</div>
+      <div class="lb-name">${escapeHtml(row.name)}</div>
+      <div class="lb-bar-wrap"><div class="lb-bar-fill ${RANK_CLASSES[i]||'rankN'}" style="width:${pct}%"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+        <div class="lb-amount">KES ${fmt(row.interestPaid)}</div>${pendingTag}
+      </div>
+    </div>`;
+  }).join('');
+  const memberRows=DATA.members.map(m=>{
+    const ms=memberStats(m.name);
+    const lim=memberLimit(m);
+    const outDisplay=ms.outstanding
+      ?`<span style="color:var(--stamp-amber)">KES ${fmt(ms.outstanding)}</span><br><span style="font-size:11px;color:var(--ink-faint);">(${fmt(ms.outstandingPrincipal)} + ${fmt(ms.outstandingInterest)} int.)</span>`:'—';
+    return`<tr>
+      <td data-label="Member">${escapeHtml(m.name)}</td>
+      <td data-label="Borrowed" class="num">KES ${fmt(ms.totalBorrowed)}</td>
+      <td data-label="Interest paid" class="num">KES ${fmt(ms.interestPaid)}</td>
+      <td data-label="Outstanding" class="num">${outDisplay}</td>
+      <td data-label="Max limit" class="num" style="color:var(--green)">KES ${fmt(lim.maxLimit)}</td>
+      <td data-label="Available now" class="num" style="color:${lim.available>0?'var(--green)':'var(--stamp-red)'}">KES ${fmt(lim.available)}</td>
+    </tr>`;
+  }).join('');
+  return`<div class="panel active">
+    <div class="stat-grid">
+      <div class="stat"><div class="label">Pool (contributions)</div><div class="value">KES ${fmt(s.pool)}</div></div>
+      <div class="stat"><div class="label">Outstanding principal</div><div class="value amber">KES ${fmt(s.outstandingPrincipal)}</div></div>
+      <div class="stat"><div class="label">Interest collected</div><div class="value green">KES ${fmt(s.interestPaid)}</div></div>
+      <div class="stat"><div class="label">Transaction costs</div><div class="value red">KES ${fmt(s.txnCost)}</div></div>
+      <div class="stat"><div class="label">Net generated</div><div class="value green">KES ${fmt(s.netGenerated)}</div></div>
+      <div class="stat"><div class="label">Interest pending</div><div class="value amber">KES ${fmt(s.interestPending)}</div></div>
+    </div>
+    <div class="card"><h2>By member <span class="count">${DATA.members.length} — incl. borrowing limits</span></h2>
+      <table><thead><tr><th>Member</th><th>Borrowed</th><th>Interest paid</th><th>Outstanding</th><th>Max limit</th><th>Available now</th></tr></thead>
+      <tbody>${memberRows||'<tr><td colspan="6"><div class="empty-state">No members yet</div></td></tr>'}</tbody></table>
+    </div>
+    <div class="card">
+      <h2>Interest leaderboard <span class="count">who's contributed most to the pot</span></h2>
+      <div class="leaderboard">${lbRows||'<div class="empty-state">No interest recorded yet.</div>'}</div>
+    </div>
+  </div>`;
+}
+
+// Loans 
+function renderLoans(){
+  const grouped={};
+  DATA.loans.forEach(l=>{ if(!grouped[l.round]) grouped[l.round]=[]; grouped[l.round].push(l); });
+  const sections=Object.keys(grouped).map(round=>{
+    const rows=grouped[round].map(l=>{
+      const rot=stampRotation(l.id);
+      const statusEl=isAdmin
+        ?`<button class="stamp ${l.status} toggle-status" data-id="${l.id}" style="transform:rotate(${rot}deg)" title="Toggle paid/pending">${l.status}</button>`
+        :`<span class="stamp ${l.status}" style="transform:rotate(${rot}deg)">${l.status}</span>`;
+      const actionBtns=isAdmin?`<div class="row-actions"><button class="icon-btn edit-loan" data-id="${l.id}" title="Edit">✏️</button><button class="danger-text delete-loan" data-id="${l.id}">remove</button></div>`:'';
+      return`<tr data-id="${l.id}">
+        <td data-label="Borrower">${escapeHtml(l.borrower)}</td>
+        <td data-label="Principal" class="num">${l.principal?'KES '+fmt(l.principal):'—'}</td>
+        <td data-label="Interest" class="num">KES ${fmt(l.interestAmount)}</td>
+        <td data-label="Status">${statusEl}</td>
+        <td data-label="Notes" class="notes">${escapeHtml(l.notes)||'—'}</td>
+        <td data-label="">${actionBtns}</td>
+      </tr>`;
+    }).join('');
+    return`<div class="card"><h2>${escapeHtml(round)} <span class="count">${grouped[round].length} ${grouped[round].length===1?'entry':'entries'}</span></h2>
+      <table><thead><tr><th>Borrower</th><th>Principal</th><th>Interest</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`;
+  }).join('');
+  return`<div class="panel active">${sections||'<div class="empty-state">No loans recorded yet.</div>'}</div>`;
+}
+
+// Members 
+function renderMembers(){
+  const s=computeStats();
+  const rows=DATA.members.map(m=>{
+    const ms=memberStats(m.name);
+    const lim=memberLimit(m);
+    const pct=s.pool?Math.round((m.contribution/s.pool)*100):0;
+    const cs=consistencyScore(m.id);
+    const editContribBtn=isAdmin?`<button class="icon-btn edit-contrib" data-id="${m.id}" title="Update contribution" style="margin-left:6px;">✏️</button>`:'';
+    const removeBtn=isAdmin?`<div style="margin-top:14px;"><button class="danger-text remove-member" data-id="${m.id}">remove member</button></div>`:'';
+
+    // Limit bar
+    const limitBarPct=lim.maxLimit>0?Math.round((lim.available/lim.maxLimit)*100):0;
+    const usedPct=lim.maxLimit>0?Math.round((lim.used/lim.maxLimit)*100):0;
+    const limitBar=`<div class="limit-bar-wrap">
+      <div class="limit-bar-labels"><span>Borrowing limit</span><span>Max: KES ${fmt(lim.maxLimit)}</span></div>
+      <div class="limit-track">
+        <div class="limit-fill-max" style="width:100%"></div>
+        <div class="limit-fill-avail" style="width:${limitBarPct}%"></div>
+        <div class="limit-fill-used" style="width:${usedPct}%;left:${limitBarPct}%"></div>
+      </div>
+      <div class="limit-pills">
+        <span class="limit-pill max">Max KES ${fmt(lim.maxLimit)}</span>
+        <span class="limit-pill avail">Available KES ${fmt(lim.available)}</span>
+        ${lim.used?`<span class="limit-pill used">In use KES ${fmt(lim.used)}</span>`:''}
+      </div>
+    </div>`;
+
+    return`<div class="card" data-id="${m.id}">
+      <h2>${escapeHtml(m.name)}
+        <span class="count">contributed KES ${fmt(m.contribution)}</span>
+        ${editContribBtn}
+        <span style="margin-left:auto;">${renderStars(cs.pct)} <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);">${cs.paid}/${cs.total} months</span></span>
+      </h2>
+      <div class="stat-grid" style="margin-bottom:10px;">
+        <div class="stat"><div class="label">Times borrowed</div><div class="value">${ms.loanCount}</div></div>
+        <div class="stat"><div class="label">Total borrowed</div><div class="value">KES ${fmt(ms.totalBorrowed)}</div></div>
+        <div class="stat"><div class="label">Interest paid</div><div class="value green">KES ${fmt(ms.interestPaid)}</div></div>
+        <div class="stat"><div class="label">Outstanding</div><div class="value ${ms.outstanding?'amber':''}" style="font-size:${ms.outstanding>9999?'15px':'21px'}">${ms.outstanding?'KES '+fmt(ms.outstanding):'clear'}</div></div>
+      </div>
+      ${ms.outstanding?`<p style="font-size:12px;color:var(--ink-faint);margin:0 0 8px 0;">Outstanding: KES ${fmt(ms.outstandingPrincipal)} principal + KES ${fmt(ms.outstandingInterest)} interest</p>`:''}
+      ${limitBar}
+      <div class="member-pool-bar" style="margin-top:10px;">
+        <div class="member-pool-track"><div class="member-pool-fill" style="width:${pct}%"></div></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);">${pct}% of pool</span>
+      </div>
+      ${removeBtn}
+    </div>`;
+  }).join('');
+
+  const addForm=isAdmin?`<div class="card"><h2>Add a member</h2>
+    <form id="memberForm">
+      <div class="form-grid">
+        <div><label>Name</label><input type="text" name="name" required placeholder="e.g. Wanjiku"></div>
+        <div><label>Initial contribution (KES)</label><input type="number" name="contribution" min="0" step="50" required placeholder="2000"></div>
+      </div>
+      <button class="primary" type="submit">Add member</button>
+    </form></div>`:'';
+
+  return`<div class="panel active">${addForm}${rows||'<div class="empty-state">No members yet</div>'}</div>`;
+}
+
+// Capital Contributions
+function renderCapital(){
+  const months=getDisplayMonths();
+  const today=currentMonthKey();
+
+  // Summary stats
+  const totalExpected=DATA.members.length*MONTHLY_TARGET*months.filter(m=>m<=today).length;
+  let totalActual=0;
+  DATA.members.forEach(m=>{
+    const mc=getMemberMonthlyContribs(m.id);
+    months.filter(mo=>mo<=today).forEach(mo=>{
+      totalActual+=Number((mc[mo]&&mc[mo].amount)||0);
+    });
+  });
+
+  // Consistency ranking
+  const rankings=DATA.members.map(m=>{
+    const cs=consistencyScore(m.id);
+    return{name:m.name,id:m.id,...cs};
+  }).sort((a,b)=>b.pct-a.pct);
+  const rankRows=rankings.map((r,i)=>`<tr>
+    <td data-label="Rank">${RANK_ICONS[i]||String(i+1)}</td>
+    <td data-label="Member">${escapeHtml(r.name)}</td>
+    <td data-label="Rating">${renderStars(r.pct)}</td>
+    <td data-label="Record" class="num">${r.paid}/${r.total}</td>
+    <td data-label="%" class="num">${r.pct}%</td>
+  </tr>`).join('');
+
+  // Grid header
+  const headerCells=months.map(m=>`<th class="${m===today?'':''}">
+    <span style="${m===today?'color:var(--margin);font-weight:700;':''}">${MONTH_LABELS[m]||m}</span>
+  </th>`).join('');
+
+  // Grid rows
+  const gridRows=DATA.members.map(m=>{
+    const mc=getMemberMonthlyContribs(m.id);
+    const cells=months.map(mo=>{
+      const entry=mc[mo];
+      const status=entry?entry.status:(mo>today?'future':'missed');
+      const amount=entry?entry.amount:0;
+      const isFuture=mo>today;
+      let cls='contrib-cell ';
+      let display='—';
+      if(isFuture){ cls+='future'; display=''; }
+      else if(status==='paid'){ cls+='paid'; display=fmt(amount); }
+      else if(status==='partial'){ cls+='partial'; display=fmt(amount); }
+      else{ cls+='missed'; display='✗'; }
+      const btnContent=isFuture?'':display;
+      const editAttr=isAdmin&&!isFuture?`data-mid="${m.id}" data-month="${mo}"`:'';
+      const clickable=isAdmin&&!isFuture?'class="'+cls+'"':'class="'+cls+'"';
+      if(isAdmin&&!isFuture){
+        return`<td class="${cls}" data-label="${MONTH_LABELS[mo]||mo}">
+          <button class="edit-monthly-cell" data-mid="${m.id}" data-month="${mo}" title="Edit">${btnContent}</button>
+        </td>`;
+      }
+      return`<td class="${cls}" data-label="${MONTH_LABELS[mo]||mo}">${btnContent}</td>`;
+    }).join('');
+    const mc2=getMemberMonthlyContribs(m.id);
+    const memberTotal=months.filter(mo=>mo<=today).reduce((s,mo)=>s+Number((mc2[mo]&&mc2[mo].amount)||0),0);
+    return`<tr>
+      <td class="name-col" data-label="Member">${escapeHtml(m.name)}</td>
+      ${cells}
+      <td class="num" data-label="Total" style="font-weight:600;">KES ${fmt(memberTotal)}</td>
+    </tr>`;
+  }).join('');
+
+  const totalsRow=`<tr style="background:var(--paper-deep);">
+    <td class="name-col" style="font-weight:700;">Total</td>
+    ${months.map(mo=>{
+      if(mo>today) return`<td class="contrib-cell future"></td>`;
+      let colTotal=0;
+      DATA.members.forEach(m=>{
+        const mc=getMemberMonthlyContribs(m.id);
+        colTotal+=Number((mc[mo]&&mc[mo].amount)||0);
+      });
+      return`<td class="num" style="font-weight:600;">KES ${fmt(colTotal)}</td>`;
+    }).join('')}
+    <td class="num" style="font-weight:700;">KES ${fmt(totalActual)}</td>
+  </tr>`;
+
+  const addMonthForm=isAdmin?`<div class="card"><h2>Add a contribution month</h2>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:0;">Click any cell in the grid above to edit it. Use settings to adjust the start month and monthly target.</p>
+  </div>`:'';
+
+  return`<div class="panel active">
+    <div class="stat-grid">
+      <div class="stat"><div class="label">Expected (to date)</div><div class="value">KES ${fmt(totalExpected)}</div></div>
+      <div class="stat"><div class="label">Actual (to date)</div><div class="value green">KES ${fmt(totalActual)}</div></div>
+      <div class="stat"><div class="label">Gap</div><div class="value ${totalExpected-totalActual>0?'red':'green'}">KES ${fmt(Math.abs(totalExpected-totalActual))}</div></div>
+    </div>
+    <div class="card">
+      <h2>Monthly contributions <span class="count">${isAdmin?'click any cell to edit':''}</span></h2>
+      <div class="contrib-grid-wrap">
+        <table class="contrib-grid">
+          <thead><tr>
+            <th class="name-col">Member</th>${headerCells}
+            <th>Total</th>
+          </tr></thead>
+          <tbody>${gridRows}${totalsRow}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Consistency rankings <span class="count">based on on-time monthly payments</span></h2>
+      <table><thead><tr><th>#</th><th>Member</th><th>Rating</th><th>Record</th><th>%</th></tr></thead>
+      <tbody>${rankRows}</tbody></table>
+    </div>
+    ${addMonthForm}
+  </div>`;
+}
+
+// Projection Chart 
+function renderProjection(){
+  return`<div class="panel active">
+    <div class="card">
+      <h2>Fund projection — expected vs actual</h2>
+      <p style="font-size:13px;color:var(--ink-soft);margin-top:-6px;margin-bottom:16px;">The blue line shows where the fund should be if everyone pays on time. The green line shows where it actually is, including interest earned.</p>
+      <div class="chart-wrap"><canvas id="projChart"></canvas></div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#3F6B4A;"></span>Actual balance</span>
+        <span><span class="legend-dot" style="background:#5B8FD0;"></span>Expected (projected)</span>
+        <span><span class="legend-dot" style="background:#A87617;background:repeating-linear-gradient(90deg,#A87617 0,#A87617 4px,transparent 4px,transparent 8px);width:20px;height:2px;border-radius:0;display:inline-block;vertical-align:middle;margin-right:5px;"></span>Interest added</span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Month-by-month breakdown</h2>
+      ${renderProjectionTable()}
+    </div>
+  </div>`;
+}
+
+function renderProjectionTable(){
+  const months=getDisplayMonths();
+  const today=currentMonthKey();
+  const target=Number(DATA.settings.monthlyTarget||2000);
+  const memberCount=DATA.members.length;
+  let cumExpected=0,cumActual=0;
+  const rows=months.filter(m=>m<=today).map(mo=>{
+    const monthExpected=target*memberCount;
+    cumExpected+=monthExpected;
+    let monthActual=0;
+    DATA.members.forEach(m=>{
+      const mc=getMemberMonthlyContribs(m.id);
+      monthActual+=Number((mc[mo]&&mc[mo].amount)||0);
+    });
+    cumActual+=monthActual;
+    const gap=cumActual-cumExpected;
+    return`<tr>
+      <td data-label="Month">${MONTH_LABELS[mo]||mo}</td>
+      <td data-label="Expected (month)" class="num">KES ${fmt(monthExpected)}</td>
+      <td data-label="Actual (month)" class="num">KES ${fmt(monthActual)}</td>
+      <td data-label="Cumulative expected" class="num">KES ${fmt(cumExpected)}</td>
+      <td data-label="Cumulative actual" class="num">KES ${fmt(cumActual)}</td>
+      <td data-label="Gap" class="num" style="color:${gap>=0?'var(--green)':'var(--stamp-red)'};">${gap>=0?'+':''}KES ${fmt(gap)}</td>
+    </tr>`;
+  }).join('');
+  return`<table><thead><tr><th>Month</th><th>Expected</th><th>Actual</th><th>Cum. expected</th><th>Cum. actual</th><th>Gap</th></tr></thead><tbody>${rows||'<tr><td colspan="6"><div class="empty-state">No data yet</div></td></tr>'}</tbody></table>`;
+}
+
+function buildProjectionChart(){
+  const canvas=document.getElementById('projChart');
+  if(!canvas) return;
+  const months=getDisplayMonths();
+  const today=currentMonthKey();
+  const target=Number(DATA.settings.monthlyTarget||2000);
+  const memberCount=DATA.members.length;
+  const labels=[];
+  const expectedData=[];
+  const actualData=[];
+  // Also add interest line (cumulative interest earned)
+  const interestData=[];
+  let cumExpected=0,cumActual=0;
+  const interestPaidTotal=DATA.loans.filter(l=>l.status==='paid').reduce((s,l)=>s+Number(l.interestAmount||0),0);
+
+  months.forEach(mo=>{
+    labels.push(MONTH_LABELS[mo]||mo);
+    cumExpected+=target*memberCount;
+    expectedData.push(cumExpected);
+    if(mo<=today){
+      let monthActual=0;
+      DATA.members.forEach(m=>{
+        const mc=getMemberMonthlyContribs(m.id);
+        monthActual+=Number((mc[mo]&&mc[mo].amount)||0);
+      });
+      cumActual+=monthActual;
+      actualData.push(cumActual);
+      // spread interest across past months proportionally (simplified)
+      interestData.push(cumActual+interestPaidTotal);
+    } else {
+      actualData.push(null);
+      interestData.push(null);
+    }
+  });
+
+  if(projChartInstance){ projChartInstance.destroy(); }
+  projChartInstance=new Chart(canvas,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        {
+          label:'Actual contributions',
+          data:actualData,
+          borderColor:'#3F6B4A',
+          backgroundColor:'rgba(63,107,74,0.08)',
+          fill:true,
+          tension:0.3,
+          pointRadius:4,
+          pointBackgroundColor:'#3F6B4A',
+          borderWidth:2,
+          spanGaps:false,
+        },
+        {
+          label:'Actual + interest earned',
+          data:interestData,
+          borderColor:'#A87617',
+          backgroundColor:'transparent',
+          fill:false,
+          tension:0.3,
+          pointRadius:3,
+          borderDash:[5,4],
+          borderWidth:2,
+          spanGaps:false,
+        },
+        {
+          label:'Expected (projected)',
+          data:expectedData,
+          borderColor:'#5B8FD0',
+          backgroundColor:'rgba(91,143,208,0.06)',
+          fill:true,
+          tension:0.3,
+          pointRadius:3,
+          pointBackgroundColor:'#5B8FD0',
+          borderWidth:2,
+        },
+      ]
+    },
+    options:{
+      responsive:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:ctx=>{
+              return ctx.dataset.label+': KES '+ctx.parsed.y.toLocaleString('en-KE',{maximumFractionDigits:0});
+            }
+          }
+        }
+      },
+      scales:{
+        y:{
+          ticks:{callback:v=>'KES '+Number(v).toLocaleString('en-KE',{maximumFractionDigits:0})},
+          grid:{color:'rgba(30,42,58,0.06)'}
+        },
+        x:{grid:{color:'rgba(30,42,58,0.04)'}}
+      }
+    }
+  });
+}
+
+// Add Entry 
+function renderAddEntry(){
+  const rounds=[...new Set(DATA.loans.map(l=>l.round))];
+  const memberOptions=DATA.members.map(m=>`<option value="${escapeHtml(m.name)}">${escapeHtml(m.name)}</option>`).join('');
+  const roundOptions=rounds.map(r=>`<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join('');
+  return`<div class="panel active">
+    <div class="card"><h2>Record a new borrowing</h2>
+      <form id="loanForm">
+        <div class="form-grid">
+          <div><label>Borrower</label><select name="borrower" required><option value="">Choose member…</option>${memberOptions}</select></div>
+          <div><label>Round / cycle label</label><input type="text" name="round" list="roundList" placeholder="e.g. 5th Borrowing" required><datalist id="roundList">${roundOptions}</datalist></div>
+          <div><label>Amount borrowed (KES)</label><input type="number" name="principal" min="0" step="50" value="0" id="principalInput"></div>
+          <div><label>Interest rate (%)</label><input type="number" name="rate" min="0" step="0.5" value="${DATA.settings.defaultInterestRate}" id="rateInput"></div>
+          <div><label>Interest amount (KES)</label><input type="number" name="interestAmount" min="0" step="5" id="interestInput"></div>
+          <div><label>Status</label><select name="status"><option value="pending">Pending</option><option value="paid">Paid</option></select></div>
+        </div>
+        <div style="margin-bottom:14px;"><label>Notes (optional)</label><textarea name="notes" placeholder="Anything worth remembering…"></textarea></div>
+        <button class="primary" type="submit">Add to ledger</button>
+      </form>
+    </div>
+    <div class="card"><h2>Or just log an interest payment</h2>
+      <p style="font-size:13px;color:var(--ink-soft);margin-top:0;">Leave "Amount borrowed" at 0 and use round label "Interest Payment".</p>
+    </div>
+  </div>`;
+}
+
+// Settings 
+function renderSettings(){
+  return`<div class="panel active">
+    <div class="card"><h2>Ledger settings</h2>
+      <form id="settingsForm">
+        <div class="form-grid">
+          <div><label>Default interest rate (%)</label><input type="number" name="defaultInterestRate" min="0" step="0.5" value="${DATA.settings.defaultInterestRate}"></div>
+          <div><label>Transaction cost adjustment (KES)</label><input type="number" name="transactionCostAdjustment" min="0" step="1" value="${DATA.settings.transactionCostAdjustment}"></div>
+          <div><label>Monthly contribution target (KES)</label><input type="number" name="monthlyTarget" min="0" step="50" value="${DATA.settings.monthlyTarget||2000}"></div>
+          <div><label>Capital tracking start month (YYYY-MM)</label><input type="text" name="startMonth" placeholder="e.g. 2026-02" value="${DATA.settings.startMonth||'2026-02'}"></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-soft);">Transaction cost is subtracted from interest collected to get net generated.</p>
+        <button class="primary" type="submit">Save settings</button>
+      </form>
+    </div>
+    <div class="card"><h2>Admin access</h2>
+      <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Accounts are created in Firebase Console → Authentication → Users. Only the UID in your Firestore security rules can write.</p>
+    </div>
+  </div>`;
+}
+
+// Events 
+function bindPanelEvents(){
+  document.querySelectorAll('.toggle-status').forEach(btn=>{
+    btn.addEventListener('click',async()=>{
+      const loan=DATA.loans.find(l=>l.id===btn.getAttribute('data-id'));
+      if(!loan) return;
+      loan.status=loan.status==='paid'?'pending':'paid';
+      await persist();
+    });
+  });
+  document.querySelectorAll('.delete-loan').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.getAttribute('data-id');
+      askConfirm('Remove this entry?',"This can't be undone.",async()=>{
+        DATA.loans=DATA.loans.filter(l=>l.id!==id);
+        await persist();
+      });
+    });
+  });
+  document.querySelectorAll('.remove-member').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.getAttribute('data-id');
+      const m=DATA.members.find(x=>x.id===id);
+      askConfirm('Remove this member?',`Remove ${m?escapeHtml(m.name):'this member'}? Their loan history stays.`,async()=>{
+        DATA.members=DATA.members.filter(x=>x.id!==id);
+        await persist();
+      });
+    });
+  });
+  document.querySelectorAll('.edit-loan').forEach(btn=>{
+    btn.addEventListener('click',()=>openEditLoanModal(btn.getAttribute('data-id')));
+  });
+  document.querySelectorAll('.edit-contrib').forEach(btn=>{
+    btn.addEventListener('click',()=>openEditContribModal(btn.getAttribute('data-id')));
+  });
+  // Monthly cell edits
+  document.querySelectorAll('.edit-monthly-cell').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const mid=btn.getAttribute('data-mid');
+      const month=btn.getAttribute('data-month');
+      openEditMonthlyModal(mid,month);
+    });
+  });
+
+  const memberForm=document.getElementById('memberForm');
+  if(memberForm){
+    memberForm.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const fd=new FormData(memberForm);
+      const name=(fd.get('name')||'').toString().trim();
+      const contribution=Number(fd.get('contribution')||0);
+      if(!name) return;
+      const existing=DATA.members.find(m=>m.name&&m.name.toLowerCase()===name.toLowerCase());
+      if(existing){ existing.contribution=Number(existing.contribution||0)+contribution; }
+      else{ DATA.members.push({id:uid('m'),name,contribution}); }
+      await persist();
+    });
+  }
+  const loanForm=document.getElementById('loanForm');
+  if(loanForm){
+    const pInp=document.getElementById('principalInput');
+    const rInp=document.getElementById('rateInput');
+    const iInp=document.getElementById('interestInput');
+    const recalc=()=>{ if(pInp&&rInp&&iInp) iInp.value=Math.round(Number(pInp.value||0)*Number(rInp.value||0)/100); };
+    pInp&&pInp.addEventListener('input',recalc);
+    rInp&&rInp.addEventListener('input',recalc);
+    recalc();
+    loanForm.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const fd=new FormData(loanForm);
+      const borrower=(fd.get('borrower')||'').toString();
+      const round=(fd.get('round')||'').toString().trim();
+      if(!borrower||!round) return;
+      DATA.loans.push({id:uid('l'),round,borrower,principal:Number(fd.get('principal')||0),interestAmount:Number(fd.get('interestAmount')||0),status:(fd.get('status')||'pending').toString(),notes:(fd.get('notes')||'').toString().trim()});
+      await persist();
+      currentTab='loans'; renderNav(); render();
+    });
+  }
+  const settingsForm=document.getElementById('settingsForm');
+  if(settingsForm){
+    settingsForm.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const fd=new FormData(settingsForm);
+      DATA.settings.defaultInterestRate=Number(fd.get('defaultInterestRate')||0);
+      DATA.settings.transactionCostAdjustment=Number(fd.get('transactionCostAdjustment')||0);
+      DATA.settings.monthlyTarget=Number(fd.get('monthlyTarget')||2000);
+      DATA.settings.startMonth=(fd.get('startMonth')||'2026-02').toString().trim();
+      await persist();
+    });
+  }
+}
+
+// Edit loan modal 
+let editingLoanId=null;
+function openEditLoanModal(id){
+  const loan=DATA.loans.find(l=>l.id===id);
+  if(!loan) return;
+  editingLoanId=id;
+  const sel=document.getElementById('editBorrowerSelect');
+  if(sel){ sel.innerHTML=DATA.members.map(m=>`<option value="${escapeHtml(m.name)}">${escapeHtml(m.name)}</option>`).join(''); sel.value=loan.borrower||''; }
+  document.getElementById('editRoundInput').value=loan.round||'';
+  document.getElementById('editPrincipal').value=loan.principal||0;
+  document.getElementById('editInterest').value=loan.interestAmount||0;
+  document.getElementById('editStatus').value=loan.status||'pending';
+  document.getElementById('editNotes').value=loan.notes||'';
+  document.getElementById('editLoanOverlay').classList.add('show');
+  if(sel) sel.focus();
+}
+function closeEditLoanModal(){ document.getElementById('editLoanOverlay').classList.remove('show'); editingLoanId=null; }
+document.getElementById('editLoanCancel').addEventListener('click',closeEditLoanModal);
+document.getElementById('editLoanForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!editingLoanId) return closeEditLoanModal();
+  const fd=new FormData(document.getElementById('editLoanForm'));
+  const loan=DATA.loans.find(l=>l.id===editingLoanId);
+  if(!loan) return closeEditLoanModal();
+  loan.borrower=(fd.get('borrower')||'').toString();
+  loan.round=(fd.get('round')||'').toString().trim();
+  loan.principal=Number(fd.get('principal')||0);
+  loan.interestAmount=Number(fd.get('interestAmount')||0);
+  loan.status=(fd.get('status')||'pending').toString();
+  loan.notes=(fd.get('notes')||'').toString().trim();
+  await persist(); closeEditLoanModal(); render();
+});
+
+// Edit contribution modal 
+let editingMemberId=null;
+function openEditContribModal(id){
+  const m=DATA.members.find(x=>x.id===id);
+  if(!m) return;
+  editingMemberId=id;
+  document.getElementById('editContribTitle').textContent=`Update contribution — ${m.name}`;
+  document.getElementById('editContribAmount').value=m.contribution||0;
+  document.getElementById('editContribTopup').value='';
+  document.getElementById('editContribOverlay').classList.add('show');
+  document.getElementById('editContribAmount').focus();
+}
+function closeEditContribModal(){ document.getElementById('editContribOverlay').classList.remove('show'); editingMemberId=null; }
+document.getElementById('editContribCancel').addEventListener('click',closeEditContribModal);
+document.getElementById('applyTopupBtn').addEventListener('click',()=>{
+  const cur=Number(document.getElementById('editContribAmount').value||0);
+  const top=Number(document.getElementById('editContribTopup').value||0);
+  if(top>0){ document.getElementById('editContribAmount').value=cur+top; document.getElementById('editContribTopup').value=''; }
+});
+document.getElementById('editContribForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!editingMemberId) return closeEditContribModal();
+  const m=DATA.members.find(x=>x.id===editingMemberId);
+  if(!m) return closeEditContribModal();
+  m.contribution=Number(document.getElementById('editContribAmount').value||0);
+  await persist(); closeEditContribModal(); render();
+});
+
+// Edit monthly modal 
+let editingMonthlyMid=null, editingMonthlyMonth=null;
+function openEditMonthlyModal(mid,month){
+  const m=DATA.members.find(x=>x.id===mid);
+  if(!m) return;
+  editingMonthlyMid=mid; editingMonthlyMonth=month;
+  const mc=getMemberMonthlyContribs(mid);
+  const entry=mc[month]||{status:'missed',amount:0,note:''};
+  document.getElementById('editMonthlyTitle').textContent=`${m.name} — ${MONTH_LABELS[month]||month}`;
+  document.getElementById('editMonthlyAmount').value=entry.amount||0;
+  document.getElementById('editMonthlyStatus').value=entry.status||'missed';
+  document.getElementById('editMonthlyNote').value=entry.note||'';
+  document.getElementById('editMonthlyOverlay').classList.add('show');
+  document.getElementById('editMonthlyAmount').focus();
+}
+function closeEditMonthlyModal(){ document.getElementById('editMonthlyOverlay').classList.remove('show'); editingMonthlyMid=null; editingMonthlyMonth=null; }
+document.getElementById('editMonthlyCancel').addEventListener('click',closeEditMonthlyModal);
+document.getElementById('editMonthlyForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!editingMonthlyMid||!editingMonthlyMonth) return closeEditMonthlyModal();
+  if(!DATA.monthlyContribs) DATA.monthlyContribs={};
+  if(!DATA.monthlyContribs[editingMonthlyMid]) DATA.monthlyContribs[editingMonthlyMid]={};
+  DATA.monthlyContribs[editingMonthlyMid][editingMonthlyMonth]={
+    status:document.getElementById('editMonthlyStatus').value,
+    amount:Number(document.getElementById('editMonthlyAmount').value||0),
+    note:document.getElementById('editMonthlyNote').value.trim()
+  };
+  await persist(); closeEditMonthlyModal(); render();
+});
+
+// Confirm modal 
+let confirmCallback=null;
+function askConfirm(title,body,onConfirm){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmBody').textContent=body;
+  confirmCallback=onConfirm;
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+document.getElementById('confirmCancel').addEventListener('click',()=>{
+  document.getElementById('confirmOverlay').classList.remove('show'); confirmCallback=null;
+});
+document.getElementById('confirmOk').addEventListener('click',async()=>{
+  document.getElementById('confirmOverlay').classList.remove('show');
+  if(confirmCallback) await confirmCallback(); confirmCallback=null;
+});
+
+// Init 
+document.getElementById('todayDate').textContent=
+  new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+renderNav();
+</script>
+</body>
+</html>
