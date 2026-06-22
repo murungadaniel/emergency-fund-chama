@@ -115,7 +115,7 @@ button:focus-visible,.stamp:focus-visible{outline:2px solid var(--ink);outline-o
 .modal p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
 .modal .row-actions{margin-top:18px;justify-content:flex-end;}
 
-/* ── Leaderboard ── */
+/* Leaderboard */
 .leaderboard{display:flex;flex-direction:column;gap:0;}
 .lb-row{display:flex;align-items:center;gap:14px;padding:13px 12px;border-bottom:1px solid var(--rule);}
 .lb-row:last-child{border-bottom:none;}
@@ -129,7 +129,7 @@ button:focus-visible,.stamp:focus-visible{outline:2px solid var(--ink);outline-o
 .lb-amount{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums;}
 .lb-pending{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--stamp-amber);white-space:nowrap;}
 
-/* ── Borrowing Limit Bar ── */
+/* Borrowing Limit Bar */
 .limit-bar-wrap{margin-top:10px;}
 .limit-bar-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);margin-bottom:4px;}
 .limit-track{width:100%;height:10px;background:var(--rule);border-radius:5px;overflow:hidden;position:relative;}
@@ -142,7 +142,7 @@ button:focus-visible,.stamp:focus-visible{outline:2px solid var(--ink);outline-o
 .limit-pill.avail{background:#fff8e8;color:var(--stamp-amber);border:1px solid #e4cc8a;}
 .limit-pill.used{background:#fdecea;color:var(--stamp-red);border:1px solid #e8b0ab;}
 
-/* ── Capital Contributions grid ── */
+/* Capital Contributions grid */
 .contrib-grid-wrap{overflow-x:auto;margin-top:4px;}
 .contrib-grid{border-collapse:collapse;min-width:600px;}
 .contrib-grid th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-faint);padding:6px 8px;border-bottom:1px solid var(--ink);text-align:center;white-space:nowrap;}
@@ -162,7 +162,7 @@ button:focus-visible,.stamp:focus-visible{outline:2px solid var(--ink);outline-o
 .star-full{color:#c9a227;}
 .star-empty{color:var(--rule);}
 
-/* ── Projection Chart ── */
+/* Projection Chart */
 .chart-wrap{position:relative;width:100%;}
 canvas#projChart{width:100%!important;max-height:320px;}
 .chart-legend{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap;}
@@ -300,7 +300,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const docRef = db.collection('ledger').doc('data');
 
-// ── Months the group tracks (start Feb 2026) ──
+// Months the group tracks (start Feb 2026)
 const ALL_MONTHS = [
   '2026-01','2026-02','2026-03','2026-04','2026-05','2026-06',
   '2026-07','2026-08','2026-09','2026-10','2026-11','2026-12',
@@ -360,7 +360,7 @@ let isAdmin = false;
 let currentTab = 'dashboard';
 let projChartInstance = null;
 
-// ── Auth ──────────────────────────────────────────────────────────────
+// Auth
 auth.onAuthStateChanged(user=>{
   isAdmin=!!user;
   const statusEl=document.getElementById('authStatus');
@@ -405,7 +405,7 @@ function humanAuthError(err){
   return 'Could not sign in ('+(c||'unknown')+').';
 }
 
-// ── Firestore ──────────────────────────────────────────────────────────
+// Firestore
 docRef.onSnapshot(doc=>{
   DATA=doc.exists?doc.data():null;
   if(DATA && !DATA.monthlyContribs) DATA.monthlyContribs={};
@@ -431,7 +431,7 @@ async function seedLedger(useDefaults){
 }
 function uid(p){ return p+'_'+Math.random().toString(36).slice(2,9); }
 
-// ── Computations ──────────────────────────────────────────────────────
+// Computations
 function computeStats(){
   const pool=DATA.members.reduce((s,m)=>s+Number(m.contribution||0),0);
   const outstandingPrincipal=DATA.loans.filter(l=>l.status==='pending').reduce((s,l)=>s+Number(l.principal||0),0);
@@ -528,7 +528,7 @@ function renderNav(){
   });
 }
 
-// ── Render ────────────────────────────────────────────────────────────
+// Render 
 function render(){
   const root=document.getElementById('appRoot');
   if(DATA===undefined){
@@ -560,7 +560,7 @@ function render(){
   if(currentTab==='projection') buildProjectionChart();
 }
 
-// ── Dashboard ─────────────────────────────────────────────────────────
+// Dashboard 
 function renderDashboard(){
   const s=computeStats();
   const lbData=DATA.members.map(m=>{
@@ -615,7 +615,7 @@ function renderDashboard(){
   </div>`;
 }
 
-// ── Loans ─────────────────────────────────────────────────────────────
+// Loans 
 function renderLoans(){
   const grouped={};
   DATA.loans.forEach(l=>{ if(!grouped[l.round]) grouped[l.round]=[]; grouped[l.round].push(l); });
@@ -642,7 +642,7 @@ function renderLoans(){
   return`<div class="panel active">${sections||'<div class="empty-state">No loans recorded yet.</div>'}</div>`;
 }
 
-// ── Members ───────────────────────────────────────────────────────────
+// Members 
 function renderMembers(){
   const s=computeStats();
   const rows=DATA.members.map(m=>{
@@ -704,7 +704,7 @@ function renderMembers(){
   return`<div class="panel active">${addForm}${rows||'<div class="empty-state">No members yet</div>'}</div>`;
 }
 
-// ── Capital Contributions ──────────────────────────────────────────────
+// Capital Contributions
 function renderCapital(){
   const months=getDisplayMonths();
   const today=currentMonthKey();
@@ -815,7 +815,7 @@ function renderCapital(){
   </div>`;
 }
 
-// ── Projection Chart ──────────────────────────────────────────────────
+// Projection Chart 
 function renderProjection(){
   return`<div class="panel active">
     <div class="card">
@@ -965,7 +965,7 @@ function buildProjectionChart(){
   });
 }
 
-// ── Add Entry ─────────────────────────────────────────────────────────
+// Add Entry 
 function renderAddEntry(){
   const rounds=[...new Set(DATA.loans.map(l=>l.round))];
   const memberOptions=DATA.members.map(m=>`<option value="${escapeHtml(m.name)}">${escapeHtml(m.name)}</option>`).join('');
@@ -991,7 +991,7 @@ function renderAddEntry(){
   </div>`;
 }
 
-// ── Settings ──────────────────────────────────────────────────────────
+// Settings 
 function renderSettings(){
   return`<div class="panel active">
     <div class="card"><h2>Ledger settings</h2>
@@ -1012,7 +1012,7 @@ function renderSettings(){
   </div>`;
 }
 
-// ── Events ────────────────────────────────────────────────────────────
+// Events 
 function bindPanelEvents(){
   document.querySelectorAll('.toggle-status').forEach(btn=>{
     btn.addEventListener('click',async()=>{
@@ -1104,7 +1104,7 @@ function bindPanelEvents(){
   }
 }
 
-// ── Edit loan modal ──────────────────────────────────────────────────
+// Edit loan modal 
 let editingLoanId=null;
 function openEditLoanModal(id){
   const loan=DATA.loans.find(l=>l.id===id);
@@ -1137,7 +1137,7 @@ document.getElementById('editLoanForm').addEventListener('submit',async e=>{
   await persist(); closeEditLoanModal(); render();
 });
 
-// ── Edit contribution modal ───────────────────────────────────────────
+// Edit contribution modal 
 let editingMemberId=null;
 function openEditContribModal(id){
   const m=DATA.members.find(x=>x.id===id);
@@ -1165,7 +1165,7 @@ document.getElementById('editContribForm').addEventListener('submit',async e=>{
   await persist(); closeEditContribModal(); render();
 });
 
-// ── Edit monthly modal ───────────────────────────────────────────────
+// Edit monthly modal 
 let editingMonthlyMid=null, editingMonthlyMonth=null;
 function openEditMonthlyModal(mid,month){
   const m=DATA.members.find(x=>x.id===mid);
@@ -1195,7 +1195,7 @@ document.getElementById('editMonthlyForm').addEventListener('submit',async e=>{
   await persist(); closeEditMonthlyModal(); render();
 });
 
-// ── Confirm modal ─────────────────────────────────────────────────────
+// Confirm modal 
 let confirmCallback=null;
 function askConfirm(title,body,onConfirm){
   document.getElementById('confirmTitle').textContent=title;
@@ -1211,7 +1211,7 @@ document.getElementById('confirmOk').addEventListener('click',async()=>{
   if(confirmCallback) await confirmCallback(); confirmCallback=null;
 });
 
-// ── Init ──────────────────────────────────────────────────────────────
+// Init 
 document.getElementById('todayDate').textContent=
   new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 renderNav();
