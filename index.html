@@ -588,7 +588,7 @@ function renderDashboard(){
       <td data-label="Interest paid" class="num">KES ${fmt(ms.interestPaid)}</td>
       <td data-label="Outstanding" class="num">${outDisplay}</td>
       <td data-label="Max limit" class="num" style="color:var(--green)">KES ${fmt(lim.maxLimit)}</td>
-      <td data-label="Available now" class="num" style="color:${lim.available>0?'var(--green)':'var(--stamp-red)'}">KES ${fmt(lim.available)}</td>
+      <td data-label="Available limit" class="num" style="color:${lim.available>0?'var(--green)':'var(--stamp-red)'}">KES ${fmt(lim.available)}</td>
     </tr>`;
   }).join('');
   return`<div class="panel active">
@@ -601,7 +601,7 @@ function renderDashboard(){
       <div class="stat"><div class="label">Interest pending</div><div class="value amber">KES ${fmt(s.interestPending)}</div></div>
     </div>
     <div class="card"><h2>By member <span class="count">${DATA.members.length} — incl. borrowing limits</span></h2>
-      <table><thead><tr><th>Member</th><th>Borrowed</th><th>Interest paid</th><th>Outstanding</th><th>Max limit</th><th>Available now</th></tr></thead>
+      <table><thead><tr><th>Member</th><th>Borrowed</th><th>Interest paid</th><th>Outstanding</th><th>Max limit</th><th>Available limit</th></tr></thead>
       <tbody>${memberRows||'<tr><td colspan="6"><div class="empty-state">No members yet</div></td></tr>'}</tbody></table>
     </div>
     <div class="card">
