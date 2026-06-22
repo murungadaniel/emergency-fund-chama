@@ -323,7 +323,7 @@ const DEFAULT_DATA = {
     {id:'m4',name:'Grace',contribution:2000},
     {id:'m5',name:'Chiroli',contribution:2000},
   ],
-  settings:{defaultInterestRate:10,transactionCostAdjustment:295,monthlyTarget:2000,startMonth:'2025-02'},
+  settings:{defaultInterestRate:10,transactionCostAdjustment:295,monthlyTarget:2000,startMonth:'2026-02'},
   loans:[
     {id:'l1',round:'1st Borrowing',borrower:'Daniel',principal:2000,interestAmount:200,status:'paid',notes:''},
     {id:'l2',round:'1st Borrowing',borrower:'Grace',principal:2000,interestAmount:200,status:'paid',notes:''},
@@ -343,11 +343,11 @@ const DEFAULT_DATA = {
   ],
   // monthlyContribs: { memberId: { 'YYYY-MM': { status:'paid'|'missed'|'partial'|'future', amount:2000, note:'' } } }
   monthlyContribs: {
-    'm1':{'2025-02':{status:'paid',amount:2000,note:''},'2025-03':{status:'paid',amount:2000,note:''},'2025-04':{status:'paid',amount:500,note:'Partial'},'2025-05':{status:'missed',amount:0,note:''}},
-    'm2':{'2025-02':{status:'paid',amount:2000,note:''},'2025-03':{status:'paid',amount:2000,note:''},'2025-04':{status:'paid',amount:2000,note:''},'2025-05':{status:'paid',amount:2000,note:''}},
-    'm3':{'2025-02':{status:'paid',amount:2000,note:''},'2025-03':{status:'missed',amount:0,note:''},'2025-04':{status:'missed',amount:0,note:''},'2025-05':{status:'missed',amount:0,note:''}},
-    'm4':{'2025-02':{status:'paid',amount:2000,note:''},'2025-03':{status:'paid',amount:2000,note:''},'2025-04':{status:'paid',amount:2000,note:''},'2025-05':{status:'paid',amount:2000,note:''}},
-    'm5':{'2025-02':{status:'missed',amount:0,note:''},'2025-03':{status:'missed',amount:0,note:''},'2025-04':{status:'missed',amount:0,note:''},'2025-05':{status:'missed',amount:0,note:''}},
+    'm1':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'paid',amount:2000,note:''},'2026-04':{status:'paid',amount:500,note:'Partial'},'2026-05':{status:'missed',amount:0,note:''}},
+    'm2':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'paid',amount:2000,note:''},'2026-04':{status:'paid',amount:2000,note:''},'2026-05':{status:'paid',amount:2000,note:''}},
+    'm3':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'missed',amount:0,note:''},'2026-04':{status:'missed',amount:0,note:''},'2026-05':{status:'missed',amount:0,note:''}},
+    'm4':{'2026-02':{status:'paid',amount:2000,note:''},'2026-03':{status:'paid',amount:2000,note:''},'2026-04':{status:'paid',amount:2000,note:''},'2026-05':{status:'paid',amount:2000,note:''}},
+    'm5':{'2026-02':{status:'missed',amount:0,note:''},'2026-03':{status:'missed',amount:0,note:''},'2026-04':{status:'missed',amount:0,note:''},'2026-05':{status:'missed',amount:O,note:''}},
   }
 };
 
@@ -406,7 +406,7 @@ docRef.onSnapshot(doc=>{
   DATA=doc.exists?doc.data():null;
   if(DATA && !DATA.monthlyContribs) DATA.monthlyContribs={};
   if(DATA && !DATA.settings.monthlyTarget) DATA.settings.monthlyTarget=2000;
-  if(DATA && !DATA.settings.startMonth) DATA.settings.startMonth='2025-02';
+  if(DATA && !DATA.settings.startMonth) DATA.settings.startMonth='2026-02';
   render();
 },err=>{ console.error(err); DATA=undefined; render(); });
 
@@ -422,7 +422,7 @@ function flashSaved(failed){
   saveTimer=setTimeout(()=>p.classList.remove('show'),1600);
 }
 async function seedLedger(useDefaults){
-  const initial=useDefaults?JSON.parse(JSON.stringify(DEFAULT_DATA)):{members:[],loans:[],monthlyContribs:{},settings:{defaultInterestRate:10,transactionCostAdjustment:0,monthlyTarget:2000,startMonth:'2025-02'}};
+  const initial=useDefaults?JSON.parse(JSON.stringify(DEFAULT_DATA)):{members:[],loans:[],monthlyContribs:{},settings:{defaultInterestRate:10,transactionCostAdjustment:0,monthlyTarget:2000,startMonth:'2026-02'}};
   try{ await docRef.set(initial); }catch(e){ alert('Could not set up: '+e.message); }
 }
 function uid(p){ return p+'_'+Math.random().toString(36).slice(2,9); }
@@ -483,7 +483,7 @@ function currentMonthKey(){
 
 // Track months to display (from settings.startMonth to today+2)
 function getDisplayMonths(){
-  const start=DATA.settings.startMonth||'2025-02';
+  const start=DATA.settings.startMonth||'2026-02';
   const today=new Date();
   const endDate=new Date(today.getFullYear(),today.getMonth()+2,1);
   const months=[];
@@ -996,7 +996,7 @@ function renderSettings(){
           <div><label>Default interest rate (%)</label><input type="number" name="defaultInterestRate" min="0" step="0.5" value="${DATA.settings.defaultInterestRate}"></div>
           <div><label>Transaction cost adjustment (KES)</label><input type="number" name="transactionCostAdjustment" min="0" step="1" value="${DATA.settings.transactionCostAdjustment}"></div>
           <div><label>Monthly contribution target (KES)</label><input type="number" name="monthlyTarget" min="0" step="50" value="${DATA.settings.monthlyTarget||2000}"></div>
-          <div><label>Capital tracking start month (YYYY-MM)</label><input type="text" name="startMonth" placeholder="e.g. 2025-02" value="${DATA.settings.startMonth||'2025-02'}"></div>
+          <div><label>Capital tracking start month (YYYY-MM)</label><input type="text" name="startMonth" placeholder="e.g. 2026-02" value="${DATA.settings.startMonth||'2026-02'}"></div>
         </div>
         <p style="font-size:12.5px;color:var(--ink-soft);">Transaction cost is subtracted from interest collected to get net generated.</p>
         <button class="primary" type="submit">Save settings</button>
@@ -1094,7 +1094,7 @@ function bindPanelEvents(){
       DATA.settings.defaultInterestRate=Number(fd.get('defaultInterestRate')||0);
       DATA.settings.transactionCostAdjustment=Number(fd.get('transactionCostAdjustment')||0);
       DATA.settings.monthlyTarget=Number(fd.get('monthlyTarget')||2000);
-      DATA.settings.startMonth=(fd.get('startMonth')||'2025-02').toString().trim();
+      DATA.settings.startMonth=(fd.get('startMonth')||'2026-02').toString().trim();
       await persist();
     });
   }
